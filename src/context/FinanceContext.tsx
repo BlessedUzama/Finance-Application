@@ -118,9 +118,17 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const addTransaction = (newTxData: Omit<Transaction, 'id'>) => {
     const newTransaction: Transaction = {
       ...newTxData,
-      id: `t-${Date.now()}`,
+      id: `t-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
     };
     setTransactions((prev) => [newTransaction, ...prev]);
+  };
+
+  const importTransactions = (txList: Omit<Transaction, 'id'>[]) => {
+    const newItems: Transaction[] = txList.map((txData, index) => ({
+      ...txData,
+      id: `t-${Date.now()}-${index}-${Math.random().toString(36).substring(2, 6)}`,
+    }));
+    setTransactions((prev) => [...newItems, ...prev]);
   };
 
   const removeTransaction = (id: string) => {
@@ -171,6 +179,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     budgetProgress,
     filteredTransactions,
     addTransaction,
+    importTransactions,
     removeTransaction,
     updateBudget,
     addSavingsGoal,

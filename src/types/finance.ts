@@ -71,6 +71,7 @@ export interface FinanceContextType {
   
   // State Mutators & Filters
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  importTransactions: (transactions: Omit<Transaction, 'id'>[]) => void;
   removeTransaction: (id: string) => void;
   updateBudget: (categoryId: string, newAllocation: number) => void;
   addSavingsGoal: (goal: Omit<SavingsGoal, 'id'>) => void;

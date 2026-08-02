@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from './MetricsGrid';
+import { exportTransactionsToCsv } from '../../utils/csvExport';
+import { CsvImportModal } from './CsvImportModal';
 
 type SortField = 'date' | 'merchant' | 'amount';
 type SortOrder = 'asc' | 'desc';
@@ -22,6 +24,7 @@ export const TransactionTable: React.FC = () => {
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
+  const [isCsvImportOpen, setIsCsvImportOpen] = useState(false);
 
   // Toggle sorting
   const handleSort = (field: SortField) => {
@@ -65,6 +68,9 @@ export const TransactionTable: React.FC = () => {
 
   return (
     <div id="transaction-history-table" className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
+      {/* Import CSV Modal Dialog */}
+      <CsvImportModal isOpen={isCsvImportOpen} onClose={() => setIsCsvImportOpen(false)} />
+
       {/* Header & Main Controls Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div>
@@ -78,7 +84,7 @@ export const TransactionTable: React.FC = () => {
         </div>
 
         {/* Toolbar Controls */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Income / Expense Tabs */}
           <div className="flex items-center rounded-lg bg-slate-950 p-1 border border-slate-800 text-xs font-medium">
             <button
@@ -111,7 +117,7 @@ export const TransactionTable: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none cursor-pointer"
+            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Categories</option>
             {budgets.map((b) => (
@@ -130,7 +136,7 @@ export const TransactionTable: React.FC = () => {
               placeholder="Search history..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-36 sm:w-44 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+              className="w-32 sm:w-40 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
             />
             {searchQuery && (
               <button
@@ -142,9 +148,26 @@ export const TransactionTable: React.FC = () => {
             )}
           </div>
 
+          {/* CSV Import & Export Action Buttons */}
+          <button
+            onClick={() => setIsCsvImportOpen(true)}
+            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+            title="Import CSV Statement"
+          >
+            📥 Import
+          </button>
+
+          <button
+            onClick={() => exportTransactionsToCsv(processedTransactions)}
+            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+            title="Export Ledger to CSV"
+          >
+            📤 Export
+          </button>
+
           <button
             onClick={() => setIsAddTransactionOpen(true)}
-            className="rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all cursor-pointer"
+            className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all cursor-pointer"
           >
             + Add Entry
           </button>
