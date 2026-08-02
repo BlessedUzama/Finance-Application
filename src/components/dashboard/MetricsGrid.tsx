@@ -1,16 +1,6 @@
 import React from 'react';
 import { useFinance } from '../../context/FinanceContext';
 
-// Helper function to format numbers as USD currency
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
-};
-
 interface MetricCardProps {
   title: string;
   value: string;
@@ -103,7 +93,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 };
 
 export const MetricsGrid: React.FC = () => {
-  const { metrics } = useFinance();
+  const { metrics, formatCurrency } = useFinance();
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

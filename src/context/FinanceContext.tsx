@@ -7,7 +7,17 @@ import type {
   FinancialMetrics,
   ComputedBudgetProgress,
   FinanceContextType,
+  CurrencyCode,
+  CurrencyConfig,
 } from '../types/finance';
+
+const CURRENCY_CONFIGS: Record<CurrencyCode, CurrencyConfig> = {
+  USD: { code: 'USD', symbol: '$', label: 'US Dollar', rate: 1.0, locale: 'en-US' },
+  EUR: { code: 'EUR', symbol: '€', label: 'Euro', rate: 0.92, locale: 'de-DE' },
+  GBP: { code: 'GBP', symbol: '£', label: 'British Pound', rate: 0.79, locale: 'en-GB' },
+  NGN: { code: 'NGN', symbol: '₦', label: 'Nigerian Naira', rate: 1550.0, locale: 'en-NG' },
+  CAD: { code: 'CAD', symbol: 'CA$', label: 'Canadian Dollar', rate: 1.36, locale: 'en-CA' },
+};
 
 const INITIAL_BUDGETS: Budget[] = [
   { id: 'b-1', category: 'Housing & Utilities', allocatedAmount: 1800, color: '#3B82F6' },
@@ -52,6 +62,21 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddTransactionOpen, setIsAddTransactionOpen] = useState<boolean>(false);
+  const [currentCurrency, setCurrentCurrency] = useState<CurrencyCode>('USD');
+
+  const currencyConfig = CURRENCY_CONFIGS[currentCurrency];
+  const availableCurrencies = Object.values(CURRENCY_CONFIGS);
+
+  // Multi-currency formatter method
+  const formatCurrency = (amountInUsd: number): string => {
+    const converted = amountInUsd * currencyConfig.rate;
+    return new Intl.NumberFormat(currencyConfig.locale, {
+      style: 'currency',
+      currency: currencyConfig.code,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(converted);
+  };
 
   // 1. Derive Overall Financial Overview Metrics
   const metrics = useMemo<FinancialMetrics>(() => {
@@ -97,7 +122,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, [budgets, transactions]);
 
-  // 3. Derive Filtered Transactions for Table View (Robust Search)
+  // 3. Derive Filtered Transactions for Table View
   const filteredTransactions = useMemo<Transaction[]>(() => {
     return transactions.filter((t) => {
       const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
@@ -175,6 +200,11 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     selectedCategory,
     searchQuery,
     isAddTransactionOpen,
+    currentCurrency,
+    currencyConfig,
+    availableCurrencies,
+    setCurrentCurrency,
+    formatCurrency,
     metrics,
     budgetProgress,
     filteredTransactions,

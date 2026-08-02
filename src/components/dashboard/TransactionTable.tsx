@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { useFinance } from '../../context/FinanceContext';
-import { formatCurrency } from './MetricsGrid';
 import { exportTransactions, type ExportFormat } from '../../utils/dataExport';
 import { DataImportModal } from './DataImportModal';
 
@@ -18,6 +17,7 @@ export const TransactionTable: React.FC = () => {
     setSearchQuery,
     removeTransaction,
     setIsAddTransactionOpen,
+    formatCurrency,
   } = useFinance();
 
   // Local Sort & Type Filter State

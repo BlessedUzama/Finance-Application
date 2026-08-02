@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddTransactionModal } from '../dashboard/AddTransactionModal';
-import { formatCurrency } from '../dashboard/MetricsGrid';
+import type { CurrencyCode } from '../../types/finance';
 
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
@@ -20,7 +20,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   subscriptionsSlot,
   transactionTableSlot,
 }) => {
-  const { searchQuery, setSearchQuery, setIsAddTransactionOpen, filteredTransactions } = useFinance();
+  const {
+    searchQuery,
+    setSearchQuery,
+    setIsAddTransactionOpen,
+    filteredTransactions,
+    currentCurrency,
+    availableCurrencies,
+    setCurrentCurrency,
+    formatCurrency,
+  } = useFinance();
+
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const handleSearchFocus = () => {
@@ -29,7 +39,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const handleResultClick = () => {
     setIsSearchFocused(false);
-    // Smooth scroll down to transaction history section ONLY when a search result item is clicked
     const element = document.getElementById('transaction-history');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -56,8 +65,24 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           </div>
 
-          {/* Quick Date Range & Action Controls */}
+          {/* Currency Switcher & Action Controls */}
           <div className="flex items-center gap-3">
+            {/* Multi-Currency Switcher Dropdown */}
+            <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
+              <span className="text-slate-500">💱</span>
+              <select
+                value={currentCurrency}
+                onChange={(e) => setCurrentCurrency(e.target.value as CurrencyCode)}
+                className="bg-transparent text-white font-mono font-semibold focus:outline-none cursor-pointer"
+              >
+                {availableCurrencies.map((c) => (
+                  <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                    {c.symbol} {c.code} ({c.label})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="hidden sm:flex items-center rounded-lg bg-slate-900 border border-slate-800 p-1 text-xs font-medium text-slate-400">
               <button className="rounded-md bg-slate-800 px-3 py-1 text-white shadow-sm transition-all">
                 This Month
@@ -65,6 +90,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <button className="px-3 py-1 hover:text-slate-200 transition-colors">Quarter</button>
               <button className="px-3 py-1 hover:text-slate-200 transition-colors">Year</button>
             </div>
+
             <button
               onClick={() => setIsAddTransactionOpen(true)}
               className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
@@ -84,7 +110,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               Financial Operations Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Real-time cashflow analytics, category budgets, savings goals, and transaction history.
+              Real-time cashflow analytics, category budgets, savings goals, and multi-currency ledger.
             </p>
           </div>
 

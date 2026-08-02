@@ -1,5 +1,14 @@
 export type TransactionType = 'income' | 'expense';
 export type TransactionStatus = 'completed' | 'pending';
+export type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'NGN' | 'CAD';
+
+export interface CurrencyConfig {
+  code: CurrencyCode;
+  symbol: string;
+  label: string;
+  rate: number; // exchange rate relative to 1 USD
+  locale: string;
+}
 
 export interface Transaction {
   id: string;
@@ -64,6 +73,13 @@ export interface FinanceContextType {
   searchQuery: string;
   isAddTransactionOpen: boolean;
   
+  // Multi-Currency State
+  currentCurrency: CurrencyCode;
+  currencyConfig: CurrencyConfig;
+  availableCurrencies: CurrencyConfig[];
+  setCurrentCurrency: (code: CurrencyCode) => void;
+  formatCurrency: (amount: number) => string;
+
   // Derived / Computed Data
   metrics: FinancialMetrics;
   budgetProgress: ComputedBudgetProgress[];

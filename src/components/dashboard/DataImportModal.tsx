@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import type { Transaction, TransactionType, TransactionStatus } from '../../types/finance';
-import { formatCurrency } from './MetricsGrid';
 
 interface DataImportModalProps {
   isOpen: boolean;
@@ -9,7 +8,7 @@ interface DataImportModalProps {
 }
 
 export const DataImportModal: React.FC<DataImportModalProps> = ({ isOpen, onClose }) => {
-  const { importTransactions, budgets } = useFinance();
+  const { importTransactions, budgets, formatCurrency } = useFinance();
   const [parsedRows, setParsedRows] = useState<Omit<Transaction, 'id'>[]>([]);
   const [fileName, setFileName] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');

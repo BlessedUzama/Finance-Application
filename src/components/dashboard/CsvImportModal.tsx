@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import type { Transaction, TransactionType, TransactionStatus } from '../../types/finance';
-import { formatCurrency } from './MetricsGrid';
 
 interface CsvImportModalProps {
   isOpen: boolean;
@@ -9,7 +8,7 @@ interface CsvImportModalProps {
 }
 
 export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose }) => {
-  const { importTransactions, budgets } = useFinance();
+  const { importTransactions, budgets, formatCurrency } = useFinance();
   const [parsedRows, setParsedRows] = useState<Omit<Transaction, 'id'>[]>([]);
   const [fileName, setFileName] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -35,7 +34,6 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose 
           return;
         }
 
-        // Parse header row
         const headers = lines[0].toLowerCase().split(',').map((h) => h.replace(/["']/g, '').trim());
         
         const dateIdx = headers.findIndex((h) => h.includes('date'));
@@ -58,8 +56,6 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose 
           let rawType: TransactionType = 'expense';
           if (typeIdx !== -1 && cols[typeIdx]) {
             rawType = cols[typeIdx].toLowerCase().includes('income') ? 'income' : 'expense';
-          } else if (parseFloat(amountRaw) > 0 && headers[amountIdx]?.includes('income')) {
-            rawType = 'income';
           }
 
           let rawStatus: TransactionStatus = 'completed';
@@ -119,7 +115,6 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose 
           </button>
         </div>
 
-        {/* File Dropzone */}
         <div className="border-2 border-dashed border-slate-800 rounded-xl bg-slate-950/60 p-6 text-center hover:border-slate-700 transition-colors">
           <input
             type="file"
@@ -133,9 +128,6 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose 
             <span className="text-xs font-semibold text-blue-400 hover:text-blue-300 block">
               {fileName ? `Selected: ${fileName}` : 'Click to upload or drag & drop CSV file'}
             </span>
-            <span className="text-[10px] text-slate-500 block">
-              Supports standard bank statement exports with headers (Date, Merchant, Amount, Category)
-            </span>
           </label>
         </div>
 
@@ -145,7 +137,6 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({ isOpen, onClose 
           </div>
         )}
 
-        {/* Parsed Rows Preview */}
         {parsedRows.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-300">
