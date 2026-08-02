@@ -49,15 +49,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
   };
 
-  const toggleTheme = () => {
-    if (themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setThemeMode('light');
-    } else {
-      setThemeMode('dark');
-    }
-  };
-
   const isDarkMode = themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const toggleTheme = () => {
+    setThemeMode(isDarkMode ? 'light' : 'dark');
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200">
@@ -86,7 +82,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           {/* Theme & Currency Switchers & Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap justify-end">
-            {/* Quick Light / Dark Mode Toggle Button */}
+            {/* One-Click Light / Dark Mode Toggle Button */}
             <button
               onClick={toggleTheme}
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"

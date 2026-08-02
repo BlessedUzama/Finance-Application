@@ -81,28 +81,34 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddTransactionOpen, setIsAddTransactionOpen] = useState<boolean>(false);
   const [currentCurrency, setCurrentCurrency] = useState<CurrencyCode>('USD');
-  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem('apex_theme_mode');
+    return (saved as ThemeMode) || 'dark';
+  });
 
-  // Automatic System Default Theme Sync Effect
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    localStorage.setItem('apex_theme_mode', mode);
+  };
+
+  // Sync theme mode to documentElement class and attribute
   useEffect(() => {
     const root = document.documentElement;
 
     const applyTheme = () => {
+      let isDark = false;
       if (themeMode === 'system') {
-        const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        root.setAttribute('data-theme', isSystemDark ? 'dark' : 'light');
-        if (isSystemDark) {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
+        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       } else {
-        root.setAttribute('data-theme', themeMode);
-        if (themeMode === 'dark') {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
+        isDark = themeMode === 'dark';
+      }
+
+      if (isDark) {
+        root.classList.add('dark');
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.classList.remove('dark');
+        root.setAttribute('data-theme', 'light');
       }
     };
 
