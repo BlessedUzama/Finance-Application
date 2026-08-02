@@ -86,37 +86,35 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     return (saved as ThemeMode) || 'dark';
   });
 
+  const applyThemeToDOM = (mode: ThemeMode) => {
+    const root = document.documentElement;
+    let isDark = false;
+    if (mode === 'system') {
+      isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } else {
+      isDark = mode === 'dark';
+    }
+
+    if (isDark) {
+      root.classList.add('dark');
+      root.setAttribute('data-theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      root.setAttribute('data-theme', 'light');
+    }
+  };
+
   const setThemeMode = (mode: ThemeMode) => {
     setThemeModeState(mode);
     localStorage.setItem('apex_theme_mode', mode);
+    applyThemeToDOM(mode);
   };
 
-  // Sync theme mode to documentElement class and attribute
   useEffect(() => {
-    const root = document.documentElement;
-
-    const applyTheme = () => {
-      let isDark = false;
-      if (themeMode === 'system') {
-        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      } else {
-        isDark = themeMode === 'dark';
-      }
-
-      if (isDark) {
-        root.classList.add('dark');
-        root.setAttribute('data-theme', 'dark');
-      } else {
-        root.classList.remove('dark');
-        root.setAttribute('data-theme', 'light');
-      }
-    };
-
-    applyTheme();
-
+    applyThemeToDOM(themeMode);
     if (themeMode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const listener = () => applyTheme();
+      const listener = () => applyThemeToDOM('system');
       mediaQuery.addEventListener('change', listener);
       return () => mediaQuery.removeEventListener('change', listener);
     }
