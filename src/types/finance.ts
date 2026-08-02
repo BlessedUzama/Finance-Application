@@ -6,7 +6,7 @@ export interface CurrencyConfig {
   code: CurrencyCode;
   symbol: string;
   label: string;
-  rate: number; // exchange rate relative to 1 USD
+  rate: number;
   locale: string;
 }
 
@@ -18,6 +18,7 @@ export interface Transaction {
   amount: number;
   type: TransactionType;
   status: TransactionStatus;
+  tag?: string;
 }
 
 export interface Budget {
@@ -25,6 +26,7 @@ export interface Budget {
   category: string;
   allocatedAmount: number;
   color?: string;
+  icon?: string;
 }
 
 export interface ComputedBudgetProgress extends Budget {
@@ -93,6 +95,7 @@ export interface FinanceContextType {
   addSavingsGoal: (goal: Omit<SavingsGoal, 'id'>) => void;
   depositSavingsGoal: (id: string, amount: number) => void;
   addSubscription: (subscription: Omit<SubscriptionItem, 'id'>) => void;
+  markSubscriptionPaid: (subscriptionId: string) => void;
   setSelectedCategory: (category: string) => void;
   setSearchQuery: (query: string) => void;
   setIsAddTransactionOpen: (open: boolean) => void;

@@ -20,11 +20,11 @@ const CURRENCY_CONFIGS: Record<CurrencyCode, CurrencyConfig> = {
 };
 
 const INITIAL_BUDGETS: Budget[] = [
-  { id: 'b-1', category: 'Housing & Utilities', allocatedAmount: 1800, color: '#3B82F6' },
-  { id: 'b-2', category: 'Groceries & Dining', allocatedAmount: 800, color: '#10B981' },
-  { id: 'b-3', category: 'Transportation', allocatedAmount: 350, color: '#F59E0B' },
-  { id: 'b-4', category: 'Entertainment & Leisure', allocatedAmount: 300, color: '#8B5CF6' },
-  { id: 'b-5', category: 'Healthcare & Wellness', allocatedAmount: 250, color: '#EC4899' },
+  { id: 'b-1', category: 'Housing & Utilities', allocatedAmount: 1800, color: '#3B82F6', icon: '🏠' },
+  { id: 'b-2', category: 'Groceries & Dining', allocatedAmount: 800, color: '#10B981', icon: '🛒' },
+  { id: 'b-3', category: 'Transportation', allocatedAmount: 350, color: '#F59E0B', icon: '🚗' },
+  { id: 'b-4', category: 'Entertainment & Leisure', allocatedAmount: 300, color: '#8B5CF6', icon: '🎬' },
+  { id: 'b-5', category: 'Healthcare & Wellness', allocatedAmount: 250, color: '#EC4899', icon: '💊' },
 ];
 
 const INITIAL_TRANSACTIONS: Transaction[] = [
@@ -45,10 +45,10 @@ const INITIAL_SAVINGS_GOALS: SavingsGoal[] = [
 ];
 
 const INITIAL_SUBSCRIPTIONS: SubscriptionItem[] = [
-  { id: 's-1', name: 'Netflix Premium 4K', cost: 22.99, billingCycle: 'Monthly', dueDate: '2026-08-10', category: 'Entertainment', icon: '🎬', status: 'due-soon' },
-  { id: 's-2', name: 'AWS Cloud Infrastructure', cost: 145.50, billingCycle: 'Monthly', dueDate: '2026-08-15', category: 'Hosting & Tech', icon: '☁️', status: 'pending' },
-  { id: 's-3', name: 'Spotify Family Plan', cost: 16.99, billingCycle: 'Monthly', dueDate: '2026-08-01', category: 'Entertainment', icon: '🎵', status: 'paid' },
-  { id: 's-4', name: 'Equinox Gym Membership', cost: 180.00, billingCycle: 'Monthly', dueDate: '2026-08-05', category: 'Health', icon: '🏋️', status: 'due-soon' },
+  { id: 's-1', name: 'Netflix Premium 4K', cost: 22.99, billingCycle: 'Monthly', dueDate: '2026-08-10', category: 'Entertainment & Leisure', icon: '🎬', status: 'due-soon' },
+  { id: 's-2', name: 'AWS Cloud Infrastructure', cost: 145.50, billingCycle: 'Monthly', dueDate: '2026-08-15', category: 'Housing & Utilities', icon: '☁️', status: 'pending' },
+  { id: 's-3', name: 'Spotify Family Plan', cost: 16.99, billingCycle: 'Monthly', dueDate: '2026-08-01', category: 'Entertainment & Leisure', icon: '🎵', status: 'paid' },
+  { id: 's-4', name: 'Equinox Gym Membership', cost: 180.00, billingCycle: 'Monthly', dueDate: '2026-08-05', category: 'Healthcare & Wellness', icon: '🏋️', status: 'due-soon' },
 ];
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -192,6 +192,26 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     setSubscriptions((prev) => [...prev, newSub]);
   };
 
+  const markSubscriptionPaid = (subscriptionId: string) => {
+    const targetSub = subscriptions.find((s) => s.id === subscriptionId);
+    if (!targetSub) return;
+
+    // 1. Mark subscription as paid
+    setSubscriptions((prev) =>
+      prev.map((s) => (s.id === subscriptionId ? { ...s, status: 'paid' } : s))
+    );
+
+    // 2. Automatically log a completed expense transaction into ledger
+    addTransaction({
+      date: new Date().toISOString().split('T')[0],
+      merchant: targetSub.name,
+      category: targetSub.category || 'Entertainment & Leisure',
+      amount: targetSub.cost,
+      type: 'expense',
+      status: 'completed',
+    });
+  };
+
   const value: FinanceContextType = {
     transactions,
     budgets,
@@ -215,6 +235,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     addSavingsGoal,
     depositSavingsGoal,
     addSubscription,
+    markSubscriptionPaid,
     setSelectedCategory,
     setSearchQuery,
     setIsAddTransactionOpen,

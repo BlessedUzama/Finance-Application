@@ -9,6 +9,7 @@ interface DashboardLayoutProps {
   analyticsChartSlot?: ReactNode;
   savingsGoalsSlot?: ReactNode;
   subscriptionsSlot?: ReactNode;
+  billCalendarSlot?: ReactNode;
   transactionTableSlot?: ReactNode;
 }
 
@@ -18,6 +19,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   analyticsChartSlot,
   savingsGoalsSlot,
   subscriptionsSlot,
+  billCalendarSlot,
   transactionTableSlot,
 }) => {
   const {
@@ -212,7 +214,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         {/* Level 5: Subscriptions Monitor */}
         {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
 
-        {/* Level 6: Full-Width Transaction Data Table */}
+        {/* Level 6: Bill Calendar Section */}
+        {billCalendarSlot && <section>{billCalendarSlot}</section>}
+
+        {/* Level 7: Full-Width Transaction Data Table */}
         <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>
