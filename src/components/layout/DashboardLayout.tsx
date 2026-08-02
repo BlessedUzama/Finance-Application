@@ -5,6 +5,8 @@ interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
   budgetTrackerSlot?: ReactNode;
   analyticsChartSlot?: ReactNode;
+  savingsGoalsSlot?: ReactNode;
+  subscriptionsSlot?: ReactNode;
   transactionTableSlot?: ReactNode;
 }
 
@@ -12,9 +14,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   metricsSlot,
   budgetTrackerSlot,
   analyticsChartSlot,
+  savingsGoalsSlot,
+  subscriptionsSlot,
   transactionTableSlot,
 }) => {
-  const { selectedCategory, setSelectedCategory, searchQuery, setSearchQuery } = useFinance();
+  const { searchQuery, setSearchQuery } = useFinance();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
@@ -55,18 +59,18 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Financial Dashboard
+              Financial Operations Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Real-time overview of cashflow, budget allocations, and transaction history.
+              Real-time cashflow analytics, category budgets, savings goals, and transaction history.
             </p>
           </div>
 
-          {/* Search / Filter Quick Controls */}
+          {/* Search Quick Controls */}
           <div className="flex items-center gap-3">
             <input
               type="text"
-              placeholder="Search transactions..."
+              placeholder="Search ledger entries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full sm:w-64 rounded-lg border border-slate-800 bg-slate-900/90 px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
@@ -75,70 +79,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </div>
 
         {/* Level 2: Financial Metrics Overview Slot */}
-        <section className="space-y-3">
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <span>Key Metrics</span>
-          </div>
-          {metricsSlot ? (
-            metricsSlot
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="h-28 rounded-xl border border-dashed border-slate-800 bg-slate-900/40 p-4 flex flex-col justify-center items-center text-slate-500 text-xs animate-pulse"
-                >
-                  [ Metric Card Slot #{i} ]
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <section>{metricsSlot}</section>
 
         {/* Level 3: Mid Section (Budget Tracker & Analytics Chart) */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column (7 cols): Budget Tracker */}
-          <div className="lg:col-span-7 space-y-3">
-            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
-              <span>Category Budget Limits</span>
-            </div>
-            {budgetTrackerSlot ? (
-              budgetTrackerSlot
-            ) : (
-              <div className="h-72 rounded-xl border border-dashed border-slate-800 bg-slate-900/40 p-6 flex items-center justify-center text-slate-500 text-xs animate-pulse">
-                [ Budget Tracker Component Slot ]
-              </div>
-            )}
-          </div>
-
-          {/* Right Column (5 cols): Visual Analytics */}
-          <div className="lg:col-span-5 space-y-3">
-            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
-              <span>Cash Flow Analytics</span>
-            </div>
-            {analyticsChartSlot ? (
-              analyticsChartSlot
-            ) : (
-              <div className="h-72 rounded-xl border border-dashed border-slate-800 bg-slate-900/40 p-6 flex items-center justify-center text-slate-500 text-xs animate-pulse">
-                [ Analytics Chart Slot ]
-              </div>
-            )}
-          </div>
+          <div className="lg:col-span-7">{budgetTrackerSlot}</div>
+          <div className="lg:col-span-5">{analyticsChartSlot}</div>
         </section>
 
-        {/* Level 4: Full-Width Transaction Data Table */}
-        <section className="space-y-3">
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <span>Transaction Activity</span>
-          </div>
-          {transactionTableSlot ? (
-            transactionTableSlot
-          ) : (
-            <div className="h-80 rounded-xl border border-dashed border-slate-800 bg-slate-900/40 p-6 flex items-center justify-center text-slate-500 text-xs animate-pulse">
-              [ Transaction Table Component Slot ]
-            </div>
-          )}
-        </section>
+        {/* Level 4: Savings Goals Tracker */}
+        {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
+
+        {/* Level 5: Subscriptions Monitor */}
+        {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
+
+        {/* Level 6: Full-Width Transaction Data Table */}
+        <section>{transactionTableSlot}</section>
       </main>
     </div>
   );
