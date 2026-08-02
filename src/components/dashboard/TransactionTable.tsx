@@ -64,7 +64,7 @@ export const TransactionTable: React.FC = () => {
   }, [filteredTransactions, typeFilter, sortField, sortOrder]);
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
+    <div id="transaction-history-table" className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
       {/* Header & Main Controls Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div>

@@ -1,6 +1,7 @@
-import React, { type ReactNode } from 'react';
+import React, { useState, type ReactNode } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddTransactionModal } from '../dashboard/AddTransactionModal';
+import { formatCurrency } from '../dashboard/MetricsGrid';
 
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
@@ -19,7 +20,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   subscriptionsSlot,
   transactionTableSlot,
 }) => {
-  const { searchQuery, setSearchQuery, setIsAddTransactionOpen } = useFinance();
+  const { searchQuery, setSearchQuery, setIsAddTransactionOpen, filteredTransactions } = useFinance();
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+    // Smooth scroll down to transaction history section automatically
+    const element = document.getElementById('transaction-history');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
@@ -73,14 +84,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </p>
           </div>
 
-          {/* Search Quick Controls */}
+          {/* Search Quick Controls with Instant Results Dropdown */}
           <div className="flex items-center gap-3">
-            <div className="relative w-full sm:w-72">
+            <div className="relative w-full sm:w-80">
               <span className="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
               <input
                 type="text"
                 placeholder="Search transactions, merchants, amounts..."
                 value={searchQuery}
+                onFocus={handleSearchFocus}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
               />
@@ -92,6 +104,55 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 >
                   ✕
                 </button>
+              )}
+
+              {/* Instant Search Results Dropdown Popover */}
+              {searchQuery && isSearchFocused && (
+                <div className="absolute right-0 top-full mt-2 w-full sm:w-96 rounded-xl border border-slate-800 bg-slate-900/95 p-3 shadow-2xl backdrop-blur-xl z-50 space-y-2">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-xs font-semibold text-slate-400">
+                    <span>Instant Results ({filteredTransactions.length})</span>
+                    <button
+                      onClick={() => setIsSearchFocused(false)}
+                      className="text-slate-500 hover:text-white text-[10px]"
+                    >
+                      Close ✕
+                    </button>
+                  </div>
+
+                  <div className="max-h-60 overflow-y-auto divide-y divide-slate-800/60 text-xs">
+                    {filteredTransactions.length === 0 ? (
+                      <p className="py-4 text-center text-slate-500 text-xs">No transactions match "{searchQuery}"</p>
+                    ) : (
+                      filteredTransactions.map((tx) => (
+                        <div
+                          key={tx.id}
+                          onClick={() => {
+                            setIsSearchFocused(false);
+                            const element = document.getElementById('transaction-history');
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }}
+                          className="flex items-center justify-between py-2 px-2 hover:bg-slate-800/60 rounded-md cursor-pointer transition-colors"
+                        >
+                          <div>
+                            <span className="font-semibold text-white block">{tx.merchant}</span>
+                            <span className="text-[10px] text-slate-400">
+                              {tx.date} • {tx.category}
+                            </span>
+                          </div>
+                          <span
+                            className={`font-mono font-semibold text-xs ${
+                              tx.type === 'income' ? 'text-emerald-400' : 'text-slate-200'
+                            }`}
+                          >
+                            {tx.type === 'income' ? '+' : '-'} {formatCurrency(tx.amount)}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -128,7 +189,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
 
         {/* Level 6: Full-Width Transaction Data Table */}
-        <section>{transactionTableSlot}</section>
+        <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>
   );
