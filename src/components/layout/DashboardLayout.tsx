@@ -53,11 +53,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <AddTransactionModal />
 
       {/* Top Fixed / Sticky Navigation Bar */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          {/* Logo & Brand */}
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 font-bold text-white shadow-lg shadow-blue-500/25">
-              🎯
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 font-bold text-white shadow-sm">
+              <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
             </div>
             <div>
               <span className="text-base font-bold tracking-tight text-white">ApexFinance</span>
@@ -70,8 +73,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {/* Currency Switcher & Action Controls */}
           <div className="flex items-center gap-3">
             {/* Multi-Currency Switcher Dropdown */}
-            <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
-              <span className="text-slate-500">💱</span>
+            <div className="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300">
+              <svg className="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               <select
                 value={currentCurrency}
                 onChange={(e) => setCurrentCurrency(e.target.value as CurrencyCode)}
@@ -86,16 +91,16 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
 
             <div className="hidden sm:flex items-center rounded-lg bg-slate-900 border border-slate-800 p-1 text-xs font-medium text-slate-400">
-              <button className="rounded-md bg-slate-800 px-3 py-1 text-white shadow-sm transition-all">
+              <button className="rounded-md bg-slate-800 px-3 py-1 text-white shadow-sm transition-all cursor-pointer">
                 This Month
               </button>
-              <button className="px-3 py-1 hover:text-slate-200 transition-colors">Quarter</button>
-              <button className="px-3 py-1 hover:text-slate-200 transition-colors">Year</button>
+              <button className="px-3 py-1 hover:text-slate-200 transition-colors cursor-pointer">Quarter</button>
+              <button className="px-3 py-1 hover:text-slate-200 transition-colors cursor-pointer">Year</button>
             </div>
 
             <button
               onClick={() => setIsAddTransactionOpen(true)}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
             >
               <span>+ Add Transaction</span>
             </button>
@@ -109,29 +114,31 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Financial Operations Dashboard
+              Financial Dashboard
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
-              Real-time category budgets, savings goals, net worth, bill calendar, and multi-currency ledger.
+            <p className="mt-1 text-xs sm:text-sm text-slate-400">
+              Category budgets, savings goals, net worth, bill calendar, and multi-currency ledger.
             </p>
           </div>
 
           {/* Search Quick Controls with Instant Results Dropdown */}
           <div className="flex items-center gap-3">
             <div className="relative w-full sm:w-80">
-              <span className="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
+              <svg className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
               <input
                 type="text"
-                placeholder="Search transactions, merchants, amounts..."
+                placeholder="Search transactions, merchants, tags..."
                 value={searchQuery}
                 onFocus={handleSearchFocus}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+                className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-9 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-white transition-colors"
+                  className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
                   title="Clear Search"
                 >
                   ✕
@@ -140,12 +147,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
               {/* Instant Search Results Dropdown Popover */}
               {searchQuery && isSearchFocused && (
-                <div className="absolute right-0 top-full mt-2 w-full sm:w-96 rounded-xl border border-slate-800 bg-slate-900/95 p-3 shadow-2xl backdrop-blur-xl z-50 space-y-2">
+                <div className="absolute right-0 top-full mt-2 w-full sm:w-96 rounded-xl border border-slate-800 bg-slate-900 p-3 shadow-2xl z-50 space-y-2">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-xs font-semibold text-slate-400">
                     <span>Instant Results ({filteredTransactions.length})</span>
                     <button
                       onClick={() => setIsSearchFocused(false)}
-                      className="text-slate-500 hover:text-white text-[10px]"
+                      className="text-slate-500 hover:text-white text-[10px] cursor-pointer"
                     >
                       Close ✕
                     </button>
@@ -192,32 +199,32 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </span>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-blue-400 hover:text-white font-medium transition-colors"
+              className="text-blue-400 hover:text-white font-medium transition-colors cursor-pointer"
             >
               Clear Filter ✕
             </button>
           </div>
         )}
 
-        {/* Level 2: Financial Metrics Overview Slot */}
+        {/* Section 1: Financial Metrics Overview Slot */}
         <section>{metricsSlot}</section>
 
-        {/* Level 3: Budget Tracker Section */}
+        {/* Section 2: Budget Tracker Section */}
         {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
 
-        {/* Level 4: Net Worth & Balance Sheet Section */}
+        {/* Section 3: Net Worth & Balance Sheet Section */}
         {netWorthSlot && <section>{netWorthSlot}</section>}
 
-        {/* Level 5: Savings Goals Tracker */}
+        {/* Section 4: Savings Goals Tracker */}
         {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
 
-        {/* Level 6: Subscriptions Monitor */}
+        {/* Section 5: Subscriptions Monitor */}
         {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
 
-        {/* Level 7: Bill Calendar Section */}
+        {/* Section 6: Bill Calendar Section */}
         {billCalendarSlot && <section>{billCalendarSlot}</section>}
 
-        {/* Level 8: Full-Width Transaction Data Table */}
+        {/* Section 7: Full-Width Transaction Data Table */}
         <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>
