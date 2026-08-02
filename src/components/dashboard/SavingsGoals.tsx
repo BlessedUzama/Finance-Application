@@ -68,7 +68,7 @@ export const SavingsGoals: React.FC = () => {
         </button>
       </div>
 
-      {/* Responsive Goals Grid */}
+      {/* Full-width Responsive Goals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {savingsGoals.map((goal) => {
           const pct = Math.min(100, Math.round((goal.currentAmount / goal.targetAmount) * 100));
@@ -80,17 +80,17 @@ export const SavingsGoals: React.FC = () => {
               className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-900/40 p-4 hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-3"
             >
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-xl">{goal.icon}</span>
-                  <div>
-                    <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[150px]">{goal.name}</h4>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">Target Date: {goal.targetDate}</span>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="text-xl shrink-0">{goal.icon}</span>
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate">{goal.name}</h4>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono block truncate">Target Date: {goal.targetDate}</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setSelectedGoal(goal)}
-                  className="rounded-lg bg-blue-500/10 px-2.5 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
+                  className="shrink-0 rounded-lg bg-blue-500/10 px-2.5 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
                 >
                   + Deposit
                 </button>
@@ -110,7 +110,7 @@ export const SavingsGoals: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>{pct}% completed</span>
                 <span>{formatCurrency(remaining)} remaining</span>
               </div>

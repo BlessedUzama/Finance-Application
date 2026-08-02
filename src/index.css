@@ -14,10 +14,7 @@
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #64748b;
-    --accent-blue: #2563eb;
-    --accent-emerald: #16a34a;
-    --accent-amber: #d97706;
-    --accent-rose: #dc2626;
+    --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   }
 
   /* Dark Theme Variables */
@@ -32,10 +29,7 @@
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
-    --accent-blue: #3b82f6;
-    --accent-emerald: #10b981;
-    --accent-amber: #f59e0b;
-    --accent-rose: #f43f5e;
+    --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
   }
 
   html, body {
@@ -68,6 +62,6 @@
 
 /* Accessible focus ring */
 *:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }

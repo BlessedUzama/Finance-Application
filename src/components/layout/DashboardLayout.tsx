@@ -60,7 +60,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       {/* Root Fixed Add Transaction Modal Overlay */}
       <AddTransactionModal />
 
-      {/* Top Fixed / Sticky Navigation Bar */}
+      {/* Top Sticky Navigation Bar */}
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md">
         <div className="mx-auto flex flex-wrap h-auto min-h-[4rem] max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8 py-2 gap-2">
           {/* Logo & Brand */}
@@ -127,7 +127,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </header>
 
       {/* Main Content Area */}
-      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-6 space-y-6 sm:space-y-8">
         {/* Welcome & Section Title */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -224,28 +224,25 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
         )}
 
-        {/* Level 1: Financial Metrics Grid */}
+        {/* Section 1: Financial Metrics Grid */}
         <section>{metricsSlot}</section>
 
-        {/* Level 2: Responsive Desktop 2-Column Dashboard Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column (Budgets & Net Worth) */}
-          <div className="lg:col-span-7 space-y-6">
-            {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
-            {netWorthSlot && <section>{netWorthSlot}</section>}
-          </div>
+        {/* Section 2: Budget Tracker Section */}
+        {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
 
-          {/* Right Column (Savings & Subscriptions) */}
-          <div className="lg:col-span-5 space-y-6">
-            {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
-            {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
-          </div>
-        </div>
+        {/* Section 3: Net Worth Tracker Section */}
+        {netWorthSlot && <section>{netWorthSlot}</section>}
 
-        {/* Level 3: Bill Calendar Section */}
+        {/* Section 4: Savings Goals Tracker */}
+        {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
+
+        {/* Section 5: Subscriptions Monitor */}
+        {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
+
+        {/* Section 6: Bill Calendar Section */}
         {billCalendarSlot && <section>{billCalendarSlot}</section>}
 
-        {/* Level 4: Full-Width Transaction Data Table */}
+        {/* Section 7: Full-Width Transaction Data Table */}
         <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>
