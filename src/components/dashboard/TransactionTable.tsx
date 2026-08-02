@@ -177,7 +177,14 @@ export const TransactionTable: React.FC = () => {
             </button>
 
             {isExportDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1.5 w-36 rounded-xl border border-slate-800 bg-slate-950 p-1.5 shadow-xl z-50 space-y-1 text-xs font-mono">
+              <div className="absolute right-0 top-full mt-1.5 w-40 rounded-xl border border-slate-800 bg-slate-950 p-1.5 shadow-xl z-50 space-y-1 text-xs font-mono">
+                <button
+                  onClick={() => handleExport('pdf')}
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                >
+                  <span>PDF (.pdf)</span>
+                  <span className="text-[10px] text-rose-400 font-semibold">Statement</span>
+                </button>
                 <button
                   onClick={() => handleExport('csv')}
                   className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
