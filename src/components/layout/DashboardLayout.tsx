@@ -52,16 +52,18 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const isDarkMode = themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   const toggleTheme = () => {
-    setThemeMode(isDarkMode ? 'light' : 'dark');
+    // Instant 0ms toggle
+    const nextMode = isDarkMode ? 'light' : 'dark';
+    setThemeMode(nextMode);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased">
       {/* Root Fixed Add Transaction Modal Overlay */}
       <AddTransactionModal />
 
-      {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md transition-colors duration-200">
+      {/* Top Fixed / Sticky Navigation Bar */}
+      <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8 gap-2">
           {/* Logo & Brand */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -81,11 +83,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
 
           {/* Theme & Currency Switchers & Controls */}
-          <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap justify-end">
-            {/* One-Click Light / Dark Mode Toggle Button */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Instant Light / Dark Mode Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer shadow-sm active:scale-95"
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {isDarkMode ? (
@@ -128,7 +130,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </header>
 
       {/* Main Content Area */}
-      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      <main className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Welcome & Section Title */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -152,12 +154,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 value={searchQuery}
                 onFocus={handleSearchFocus}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-9 pr-8 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all shadow-sm"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-9 pr-8 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                  className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                   title="Clear Search"
                 >
                   ✕
@@ -218,32 +220,35 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </span>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-blue-600 dark:text-blue-400 hover:text-slate-900 dark:hover:text-white font-medium transition-colors cursor-pointer"
+              className="text-blue-600 dark:text-blue-400 hover:text-slate-900 dark:hover:text-white font-medium cursor-pointer"
             >
               Clear Filter ✕
             </button>
           </div>
         )}
 
-        {/* Section 1: Financial Metrics Overview Slot */}
+        {/* Level 1: Financial Metrics Grid */}
         <section>{metricsSlot}</section>
 
-        {/* Section 2: Budget Tracker Section */}
-        {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
+        {/* Level 2: Responsive Desktop 2-Column Dashboard Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column (Budgets & Net Worth) */}
+          <div className="lg:col-span-7 space-y-6">
+            {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
+            {netWorthSlot && <section>{netWorthSlot}</section>}
+          </div>
 
-        {/* Section 3: Net Worth & Balance Sheet Section */}
-        {netWorthSlot && <section>{netWorthSlot}</section>}
+          {/* Right Column (Savings & Subscriptions) */}
+          <div className="lg:col-span-5 space-y-6">
+            {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
+            {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
+          </div>
+        </div>
 
-        {/* Section 4: Savings Goals Tracker */}
-        {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
-
-        {/* Section 5: Subscriptions Monitor */}
-        {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
-
-        {/* Section 6: Bill Calendar Section */}
+        {/* Level 3: Bill Calendar Section */}
         {billCalendarSlot && <section>{billCalendarSlot}</section>}
 
-        {/* Section 7: Full-Width Transaction Data Table */}
+        {/* Level 4: Full-Width Transaction Data Table */}
         <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>
