@@ -1,75 +1,125 @@
-# React + TypeScript + Vite
+# 💎 ApexFinance PRO - Financial Management & Portfolio Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance financial management application and net worth portfolio tracker built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features Overview
 
-## React Compiler
+### 📊 1. Real-Time Financial Overview
+- **Income, Expense & Savings Metrics**: Automatically computes total monthly income, expenses, net savings, and savings rate targets.
+- **Dynamic Multi-Currency Engine**: Real-time currency conversions between **USD ($)**, **EUR (€)**, **GBP (£)**, **NGN (₦)**, and **CAD (CA$)**.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🎯 2. Category Budget Tracker
+- **Budget Allocation & Progress Bars**: Live visual feedback on spending relative to monthly cap limits.
+- **Custom Category Manager**: Add new custom budget categories with custom icons, color badges, and allocation caps.
+- **Warning & Over-Budget Alerts**: Automatic status badges (On Track, Warning at 80%, Over Budget at 100%).
 
-## Expanding the ESLint configuration
+### 💼 3. Net Worth & Portfolio Balance Sheet
+- **Asset Management**: Track checking, savings, index funds, real estate equity, and vehicle assets.
+- **Liability Tracking**: Monitor mortgages, credit card balances, and student loans.
+- **Real-Time Net Worth**: Instant computation of total assets owned minus liabilities owed.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🏆 4. Savings & Investment Goals
+- **Milestone Tracking**: Visual target date tracking, target amount goals, and current saved balances.
+- **Capital Deposit Modal**: Deposit funds directly toward specific goals with instant progress bar updates.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📅 5. Interactive Bill & Subscription Calendar
+- **Payment Schedule**: Monthly calendar layout displaying due dates for recurring bills and subscriptions.
+- **Date Inspection & Multi-Bill Action Popovers**: Click anywhere on a date cell to view, inspect, mark as paid, or remove single/multiple due items.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🔄 6. Subscriptions Overhead Monitor
+- **Overhead Calculation**: Automatically computes total monthly and annual recurring overheads for streaming services, memberships, and software.
+- **Quick Action**: One-click subscription creation and payment tracking.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 📥 7. Multi-Format Data Import & Export
+- **Import Data**: Import financial records from **CSV**, **JSON**, **TSV**, or **TXT** files with automatic field parsing.
+- **Export Statements**: Export transaction histories to professional **PDF Statements**, **CSV Spreadsheets**, **JSON Data**, or **Text Reports**.
 
+### ☀️ 8. Instant Light & Dark Mode
+- **System Default Auto-Syncing**: Syncs automatically with OS system preferences.
+- **One-Click Theme Toggle**: Instant 0ms dark mode toggle button supporting high-contrast light & dark themes.
+
+### 📱 9. Fully Responsive Mobile & Desktop Layout
+- **Mobile-First Responsiveness**: Designed to render cleanly on screens ranging from iPhone SE (375px) to ultra-wide desktop monitors.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend Core**: React 19, TypeScript
+- **Build Tooling**: Vite
+- **Styling**: Tailwind CSS v4 with custom dark mode variants
+- **Export Utilities**: jsPDF (PDF statements) & HTML5 Canvas / Portals
+- **Icons**: Inline SVG icons & Emoji design tokens
+
+---
+
+## 📂 Directory Structure
+
+```text
+Finance-Application/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── dashboard/
+│   │   │   ├── AddTransactionModal.tsx
+│   │   │   ├── BillCalendar.tsx
+│   │   │   ├── BudgetTracker.tsx
+│   │   │   ├── CategoryManagerModal.tsx
+│   │   │   ├── DataImportModal.tsx
+│   │   │   ├── MetricsGrid.tsx
+│   │   │   ├── NetWorthTracker.tsx
+│   │   │   ├── SavingsGoals.tsx
+│   │   │   ├── SubscriptionsMonitor.tsx
+│   │   │   └── TransactionTable.tsx
+│   │   └── layout/
+│   │       └── DashboardLayout.tsx
+│   ├── context/
+│   │   └── FinanceContext.tsx
+│   ├── types/
+│   │   └── finance.ts
+│   ├── utils/
+│   │   └── dataExport.ts
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+Make sure you have **Node.js** (v18+ recommended) and **npm** installed on your system.
 
+### 1. Installation
+Clone the repository and install dependencies:
+```bash
+git clone https://github.com/BlessedUzama/Finance-Application.git
+cd Finance-Application
+npm install
 ```
+
+### 2. Run Development Server
+Start the local development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
+```
+Open your browser and navigate to `http://localhost:5173`.
+
+### 3. Build for Production
+To create an optimized production bundle:
+```bash
+npm run build
+```
+
+---
+
+## 📜 License
+
+This project is open-source and available under the **MIT License**.
