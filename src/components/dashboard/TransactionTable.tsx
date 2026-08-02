@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from './MetricsGrid';
-import { exportTransactionsToCsv } from '../../utils/csvExport';
-import { CsvImportModal } from './CsvImportModal';
+import { exportTransactions, type ExportFormat } from '../../utils/dataExport';
+import { DataImportModal } from './DataImportModal';
 
 type SortField = 'date' | 'merchant' | 'amount';
 type SortOrder = 'asc' | 'desc';
@@ -24,7 +24,9 @@ export const TransactionTable: React.FC = () => {
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
-  const [isCsvImportOpen, setIsCsvImportOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [exportFormat, setExportFormat] = useState<ExportFormat>('csv');
+  const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
 
   // Toggle sorting
   const handleSort = (field: SortField) => {
@@ -66,10 +68,16 @@ export const TransactionTable: React.FC = () => {
     return result;
   }, [filteredTransactions, typeFilter, sortField, sortOrder]);
 
+  const handleExport = (fmt: ExportFormat) => {
+    setExportFormat(fmt);
+    exportTransactions(processedTransactions, fmt);
+    setIsExportDropdownOpen(false);
+  };
+
   return (
     <div id="transaction-history-table" className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
-      {/* Import CSV Modal Dialog */}
-      <CsvImportModal isOpen={isCsvImportOpen} onClose={() => setIsCsvImportOpen(false)} />
+      {/* Multi-Format Import Modal Dialog */}
+      <DataImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
 
       {/* Header & Main Controls Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-800/80 pb-4">
@@ -148,22 +156,52 @@ export const TransactionTable: React.FC = () => {
             )}
           </div>
 
-          {/* CSV Import & Export Action Buttons */}
+          {/* Multi-Format Import Button */}
           <button
-            onClick={() => setIsCsvImportOpen(true)}
+            onClick={() => setIsImportModalOpen(true)}
             className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
-            title="Import CSV Statement"
+            title="Import CSV, JSON, TSV, or TXT File"
           >
             📥 Import
           </button>
 
-          <button
-            onClick={() => exportTransactionsToCsv(processedTransactions)}
-            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
-            title="Export Ledger to CSV"
-          >
-            📤 Export
-          </button>
+          {/* Multi-Format Export Dropdown Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
+              className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer flex items-center gap-1"
+              title="Select Export Format"
+            >
+              <span>📤 Export ({exportFormat.toUpperCase()})</span>
+              <span className="text-[10px]">▼</span>
+            </button>
+
+            {isExportDropdownOpen && (
+              <div className="absolute right-0 top-full mt-1.5 w-36 rounded-xl border border-slate-800 bg-slate-950 p-1.5 shadow-xl z-50 space-y-1 text-xs font-mono">
+                <button
+                  onClick={() => handleExport('csv')}
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                >
+                  <span>CSV (.csv)</span>
+                  <span className="text-[10px] text-blue-400">Excel</span>
+                </button>
+                <button
+                  onClick={() => handleExport('json')}
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                >
+                  <span>JSON (.json)</span>
+                  <span className="text-[10px] text-purple-400">Data</span>
+                </button>
+                <button
+                  onClick={() => handleExport('txt')}
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                >
+                  <span>Text (.txt)</span>
+                  <span className="text-[10px] text-emerald-400">Report</span>
+                </button>
+              </div>
+            )}
+          </div>
 
           <button
             onClick={() => setIsAddTransactionOpen(true)}
