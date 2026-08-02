@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useFinance } from '../../context/FinanceContext';
 import type { SubscriptionItem } from '../../types/finance';
 
@@ -63,7 +64,7 @@ export const BillCalendar: React.FC = () => {
         {Array.from({ length: totalDays }).map((_, i) => {
           const dayNum = i + 1;
           const dayBills = subByDay[dayNum] || [];
-          const isToday = dayNum === 2; // Current simulated date
+          const isToday = dayNum === 2;
 
           return (
             <div
@@ -115,98 +116,100 @@ export const BillCalendar: React.FC = () => {
         })}
       </div>
 
-      {/* Date Inspection & Multi-Bill Action Modal Popover */}
-      {selectedDay !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-2xl space-y-4 text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div>
-                <h4 className="text-sm font-semibold text-white">August {selectedDay}, 2026 Schedule</h4>
-                <p className="text-[11px] text-slate-400">
-                  {activeDayBills.length === 0
-                    ? 'No bills or subscriptions scheduled on this date.'
-                    : `${activeDayBills.length} item(s) due on this date.`}
-                </p>
+      {/* Date Inspection & Multi-Bill Action Modal Popover - Portal to document.body */}
+      {selectedDay !== null &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-150">
+            <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-2xl space-y-4 text-slate-100">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h4 className="text-sm font-semibold text-white">August {selectedDay}, 2026 Schedule</h4>
+                  <p className="text-[11px] text-slate-400">
+                    {activeDayBills.length === 0
+                      ? 'No bills or subscriptions scheduled on this date.'
+                      : `${activeDayBills.length} item(s) due on this date.`}
+                  </p>
+                </div>
+                <button onClick={() => setSelectedDay(null)} className="text-slate-400 hover:text-white text-xs p-1 cursor-pointer">
+                  ✕
+                </button>
               </div>
-              <button onClick={() => setSelectedDay(null)} className="text-slate-400 hover:text-white text-xs p-1">
-                ✕
-              </button>
-            </div>
 
-            {/* List of Bills Due on Selected Date */}
-            {activeDayBills.length === 0 ? (
-              <div className="py-8 text-center text-slate-500 text-xs">
-                <p>✨ No recurring payments due on August {selectedDay}.</p>
-              </div>
-            ) : (
-              <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
-                {activeDayBills.map((sub) => (
-                  <div
-                    key={sub.id}
-                    className="flex flex-col space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3.5"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-xl">{sub.icon}</span>
-                        <div>
-                          <h5 className="text-xs font-semibold text-white">{sub.name}</h5>
-                          <span className="text-[10px] text-slate-400">{sub.category} • {sub.billingCycle}</span>
+              {/* List of Bills Due on Selected Date */}
+              {activeDayBills.length === 0 ? (
+                <div className="py-8 text-center text-slate-500 text-xs">
+                  <p>✨ No recurring payments due on August {selectedDay}.</p>
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+                  {activeDayBills.map((sub) => (
+                    <div
+                      key={sub.id}
+                      className="flex flex-col space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xl">{sub.icon}</span>
+                          <div>
+                            <h5 className="text-xs font-semibold text-white">{sub.name}</h5>
+                            <span className="text-[10px] text-slate-400">{sub.category} • {sub.billingCycle}</span>
+                          </div>
+                        </div>
+
+                        <div className="text-right font-mono">
+                          <span className="text-xs font-bold text-white block">{formatCurrency(sub.cost)}</span>
+                          <span
+                            className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-sans font-semibold capitalize ${
+                              sub.status === 'paid'
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                : sub.status === 'due-soon'
+                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                            }`}
+                          >
+                            {sub.status}
+                          </span>
                         </div>
                       </div>
 
-                      <div className="text-right font-mono">
-                        <span className="text-xs font-bold text-white block">{formatCurrency(sub.cost)}</span>
-                        <span
-                          className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-sans font-semibold capitalize ${
-                            sub.status === 'paid'
-                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                              : sub.status === 'due-soon'
-                              ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                              : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                          }`}
-                        >
-                          {sub.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Action buttons per bill */}
-                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800/80">
-                      <button
-                        type="button"
-                        onClick={() => removeSubscription(sub.id)}
-                        className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-400 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
-                      >
-                        ✕ Remove Bill
-                      </button>
-
-                      {sub.status !== 'paid' && (
+                      {/* Action buttons per bill */}
+                      <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800/80">
                         <button
                           type="button"
-                          onClick={() => markSubscriptionPaid(sub.id)}
-                          className="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
+                          onClick={() => removeSubscription(sub.id)}
+                          className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-400 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
                         >
-                          ✓ Mark as Paid
+                          ✕ Remove Bill
                         </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
 
-            <div className="flex justify-end pt-2 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => setSelectedDay(null)}
-                className="rounded-lg border border-slate-800 px-4 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
-              >
-                Close
-              </button>
+                        {sub.status !== 'paid' && (
+                          <button
+                            type="button"
+                            onClick={() => markSubscriptionPaid(sub.id)}
+                            className="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
+                          >
+                            ✓ Mark as Paid
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex justify-end pt-2 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setSelectedDay(null)}
+                  className="rounded-lg border border-slate-800 px-4 py-1.5 text-xs text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
