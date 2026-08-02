@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddTransactionModal } from '../dashboard/AddTransactionModal';
-import type { CurrencyCode, ThemeMode } from '../../types/finance';
+import type { CurrencyCode } from '../../types/finance';
 
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
@@ -49,6 +49,16 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
   };
 
+  const toggleTheme = () => {
+    if (themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setThemeMode('light');
+    } else {
+      setThemeMode('dark');
+    }
+  };
+
+  const isDarkMode = themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
   return (
     <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-100 dark:text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
       {/* Root Fixed Add Transaction Modal Overlay */}
@@ -74,22 +84,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           {/* Theme & Currency Switchers & Controls */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* System / Light / Dark Theme Selector */}
-            <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
-              <span className="text-xs">
-                {themeMode === 'system' ? '💻' : themeMode === 'light' ? '☀️' : '🌙'}
-              </span>
-              <select
-                value={themeMode}
-                onChange={(e) => setThemeMode(e.target.value as ThemeMode)}
-                className="bg-transparent text-white font-sans font-semibold focus:outline-none cursor-pointer text-xs"
-                title="Select Theme Mode (System Default supported)"
-              >
-                <option value="system" className="bg-slate-900 text-white">System Auto</option>
-                <option value="dark" className="bg-slate-900 text-white">Dark Mode</option>
-                <option value="light" className="bg-slate-900 text-white">Light Mode</option>
-              </select>
-            </div>
+            {/* Quick Light / Dark Mode Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDarkMode ? (
+                <svg className="h-4 w-4 text-amber-400 fill-current" viewBox="0 0 20 20">
+                  <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4 text-slate-300 fill-current" viewBox="0 0 20 20">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              )}
+            </button>
 
             {/* Multi-Currency Switcher Dropdown */}
             <div className="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
