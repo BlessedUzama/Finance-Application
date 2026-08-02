@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from './MetricsGrid';
-import { SavingsGoal } from '../../types/finance';
+import type { SavingsGoal } from '../../types/finance';
 
 export const SavingsGoals: React.FC = () => {
   const { savingsGoals, addSavingsGoal, depositSavingsGoal } = useFinance();

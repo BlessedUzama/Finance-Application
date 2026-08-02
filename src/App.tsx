@@ -1,4 +1,3 @@
-import React from 'react';
 import { FinanceProvider } from './context/FinanceContext';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { MetricsGrid } from './components/dashboard/MetricsGrid';
