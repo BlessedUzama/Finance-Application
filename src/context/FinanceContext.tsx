@@ -97,18 +97,20 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, [budgets, transactions]);
 
-  // 3. Derive Filtered Transactions for Table View
+  // 3. Derive Filtered Transactions for Table View (Robust Search)
   const filteredTransactions = useMemo<Transaction[]>(() => {
     return transactions.filter((t) => {
       const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
       const query = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !query ||
-        t.merchant.toLowerCase().includes(query) ||
-        t.category.toLowerCase().includes(query) ||
-        t.amount.toString().includes(query);
+      
+      if (!query) return matchesCategory;
 
-      return matchesCategory && matchesSearch;
+      const matchesMerchant = t.merchant ? t.merchant.toLowerCase().includes(query) : false;
+      const matchesCategoryName = t.category ? t.category.toLowerCase().includes(query) : false;
+      const matchesAmount = t.amount !== undefined ? t.amount.toString().includes(query) : false;
+      const matchesDate = t.date ? t.date.toLowerCase().includes(query) : false;
+
+      return matchesCategory && (matchesMerchant || matchesCategoryName || matchesAmount || matchesDate);
     });
   }, [transactions, selectedCategory, searchQuery]);
 

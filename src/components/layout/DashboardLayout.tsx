@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { useFinance } from '../../context/FinanceContext';
+import { AddTransactionModal } from '../dashboard/AddTransactionModal';
 
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
@@ -22,6 +23,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
+      {/* Root Fixed Add Transaction Modal Overlay */}
+      <AddTransactionModal />
+
       {/* Top Fixed / Sticky Navigation Bar */}
       <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -71,19 +75,20 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           {/* Search Quick Controls */}
           <div className="flex items-center gap-3">
-            <div className="relative w-full sm:w-64">
-              <span className="absolute left-3 top-2 text-xs text-slate-500">🔍</span>
+            <div className="relative w-full sm:w-72">
+              <span className="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
               <input
                 type="text"
-                placeholder="Search ledger entries..."
+                placeholder="Search transactions, merchants, amounts..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-8 pr-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1.5 text-xs text-slate-500 hover:text-white"
+                  className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-white transition-colors"
+                  title="Clear Search"
                 >
                   ✕
                 </button>
@@ -91,6 +96,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Active Search Banner */}
+        {searchQuery && (
+          <div className="flex items-center justify-between rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-xs text-blue-300">
+            <span>
+              Filtering transactions matching: <strong className="text-white">"{searchQuery}"</strong>
+            </span>
+            <button
+              onClick={() => setSearchQuery('')}
+              className="text-blue-400 hover:text-white font-medium transition-colors"
+            >
+              Clear Filter ✕
+            </button>
+          </div>
+        )}
 
         {/* Level 2: Financial Metrics Overview Slot */}
         <section>{metricsSlot}</section>
