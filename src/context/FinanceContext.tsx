@@ -4,6 +4,8 @@ import type {
   Budget,
   SavingsGoal,
   SubscriptionItem,
+  AssetItem,
+  LiabilityItem,
   FinancialMetrics,
   ComputedBudgetProgress,
   FinanceContextType,
@@ -51,6 +53,19 @@ const INITIAL_SUBSCRIPTIONS: SubscriptionItem[] = [
   { id: 's-4', name: 'Equinox Gym Membership', cost: 180.00, billingCycle: 'Monthly', dueDate: '2026-08-05', category: 'Healthcare & Wellness', icon: '🏋️', status: 'due-soon' },
 ];
 
+const INITIAL_ASSETS: AssetItem[] = [
+  { id: 'a-1', name: 'High-Yield Checking & Savings', value: 24500, category: 'Cash & Savings', icon: '🏦' },
+  { id: 'a-2', name: 'S&P 500 Index Portfolio', value: 48200, category: 'Investments', icon: '📈' },
+  { id: 'a-3', name: 'Primary Residence Equity', value: 185000, category: 'Real Estate', icon: '🏡' },
+  { id: 'a-4', name: 'Tesla Model 3 Equity', value: 22000, category: 'Vehicles', icon: '🚗' },
+];
+
+const INITIAL_LIABILITIES: LiabilityItem[] = [
+  { id: 'l-1', name: 'Primary Home Mortgage Balance', amount: 115000, category: 'Mortgages', icon: '📜' },
+  { id: 'l-2', name: 'Apex Rewards Platinum Card', amount: 2450, category: 'Credit Cards', icon: '💳' },
+  { id: 'l-3', name: 'Student Loan Balance', amount: 8500, category: 'Student Loans', icon: '🎓' },
+];
+
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
 export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -59,6 +74,8 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [budgets, setBudgets] = useState<Budget[]>(INITIAL_BUDGETS);
   const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>(INITIAL_SAVINGS_GOALS);
   const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>(INITIAL_SUBSCRIPTIONS);
+  const [assets, setAssets] = useState<AssetItem[]>(INITIAL_ASSETS);
+  const [liabilities, setLiabilities] = useState<LiabilityItem[]>(INITIAL_LIABILITIES);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddTransactionOpen, setIsAddTransactionOpen] = useState<boolean>(false);
@@ -139,6 +156,11 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, [transactions, selectedCategory, searchQuery]);
 
+  // 4. Derive Net Worth totals
+  const totalAssets = useMemo(() => assets.reduce((sum, a) => sum + a.value, 0), [assets]);
+  const totalLiabilities = useMemo(() => liabilities.reduce((sum, l) => sum + l.amount, 0), [liabilities]);
+  const netWorth = totalAssets - totalLiabilities;
+
   // Mutators
   const addTransaction = (newTxData: Omit<Transaction, 'id'>) => {
     const newTransaction: Transaction = {
@@ -196,12 +218,10 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     const targetSub = subscriptions.find((s) => s.id === subscriptionId);
     if (!targetSub) return;
 
-    // 1. Mark subscription as paid
     setSubscriptions((prev) =>
       prev.map((s) => (s.id === subscriptionId ? { ...s, status: 'paid' } : s))
     );
 
-    // 2. Automatically log a completed expense transaction into ledger
     addTransaction({
       date: new Date().toISOString().split('T')[0],
       merchant: targetSub.name,
@@ -212,11 +232,37 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   };
 
+  const addAsset = (assetData: Omit<AssetItem, 'id'>) => {
+    const newAsset: AssetItem = {
+      ...assetData,
+      id: `a-${Date.now()}`,
+    };
+    setAssets((prev) => [...prev, newAsset]);
+  };
+
+  const removeAsset = (id: string) => {
+    setAssets((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const addLiability = (liabilityData: Omit<LiabilityItem, 'id'>) => {
+    const newLiability: LiabilityItem = {
+      ...liabilityData,
+      id: `l-${Date.now()}`,
+    };
+    setLiabilities((prev) => [...prev, newLiability]);
+  };
+
+  const removeLiability = (id: string) => {
+    setLiabilities((prev) => prev.filter((l) => l.id !== id));
+  };
+
   const value: FinanceContextType = {
     transactions,
     budgets,
     savingsGoals,
     subscriptions,
+    assets,
+    liabilities,
     selectedCategory,
     searchQuery,
     isAddTransactionOpen,
@@ -228,6 +274,9 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     metrics,
     budgetProgress,
     filteredTransactions,
+    totalAssets,
+    totalLiabilities,
+    netWorth,
     addTransaction,
     importTransactions,
     removeTransaction,
@@ -236,6 +285,10 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     depositSavingsGoal,
     addSubscription,
     markSubscriptionPaid,
+    addAsset,
+    removeAsset,
+    addLiability,
+    removeLiability,
     setSelectedCategory,
     setSearchQuery,
     setIsAddTransactionOpen,

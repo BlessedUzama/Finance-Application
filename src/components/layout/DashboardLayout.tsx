@@ -7,6 +7,7 @@ interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
   budgetTrackerSlot?: ReactNode;
   analyticsChartSlot?: ReactNode;
+  netWorthSlot?: ReactNode;
   savingsGoalsSlot?: ReactNode;
   subscriptionsSlot?: ReactNode;
   billCalendarSlot?: ReactNode;
@@ -17,6 +18,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   metricsSlot,
   budgetTrackerSlot,
   analyticsChartSlot,
+  netWorthSlot,
   savingsGoalsSlot,
   subscriptionsSlot,
   billCalendarSlot,
@@ -112,7 +114,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               Financial Operations Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Real-time cashflow analytics, category budgets, savings goals, and multi-currency ledger.
+              Real-time cashflow analytics, category budgets, savings goals, net worth, and multi-currency ledger.
             </p>
           </div>
 
@@ -208,16 +210,19 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <div className="lg:col-span-5">{analyticsChartSlot}</div>
         </section>
 
-        {/* Level 4: Savings Goals Tracker */}
+        {/* Level 4: Net Worth & Balance Sheet Section */}
+        {netWorthSlot && <section>{netWorthSlot}</section>}
+
+        {/* Level 5: Savings Goals Tracker */}
         {savingsGoalsSlot && <section>{savingsGoalsSlot}</section>}
 
-        {/* Level 5: Subscriptions Monitor */}
+        {/* Level 6: Subscriptions Monitor */}
         {subscriptionsSlot && <section>{subscriptionsSlot}</section>}
 
-        {/* Level 6: Bill Calendar Section */}
+        {/* Level 7: Bill Calendar Section */}
         {billCalendarSlot && <section>{billCalendarSlot}</section>}
 
-        {/* Level 7: Full-Width Transaction Data Table */}
+        {/* Level 8: Full-Width Transaction Data Table */}
         <section id="transaction-history">{transactionTableSlot}</section>
       </main>
     </div>

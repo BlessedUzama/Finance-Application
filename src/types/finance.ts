@@ -65,12 +65,30 @@ export interface SubscriptionItem {
   status: 'paid' | 'due-soon' | 'pending';
 }
 
+export interface AssetItem {
+  id: string;
+  name: string;
+  value: number;
+  category: 'Cash & Savings' | 'Investments' | 'Real Estate' | 'Vehicles' | 'Crypto & Other';
+  icon: string;
+}
+
+export interface LiabilityItem {
+  id: string;
+  name: string;
+  amount: number;
+  category: 'Credit Cards' | 'Mortgages' | 'Student Loans' | 'Auto Loans' | 'Other Debt';
+  icon: string;
+}
+
 export interface FinanceContextType {
   // Raw Data
   transactions: Transaction[];
   budgets: Budget[];
   savingsGoals: SavingsGoal[];
   subscriptions: SubscriptionItem[];
+  assets: AssetItem[];
+  liabilities: LiabilityItem[];
   selectedCategory: string;
   searchQuery: string;
   isAddTransactionOpen: boolean;
@@ -86,6 +104,9 @@ export interface FinanceContextType {
   metrics: FinancialMetrics;
   budgetProgress: ComputedBudgetProgress[];
   filteredTransactions: Transaction[];
+  totalAssets: number;
+  totalLiabilities: number;
+  netWorth: number;
   
   // State Mutators & Filters
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
@@ -96,6 +117,10 @@ export interface FinanceContextType {
   depositSavingsGoal: (id: string, amount: number) => void;
   addSubscription: (subscription: Omit<SubscriptionItem, 'id'>) => void;
   markSubscriptionPaid: (subscriptionId: string) => void;
+  addAsset: (asset: Omit<AssetItem, 'id'>) => void;
+  removeAsset: (id: string) => void;
+  addLiability: (liability: Omit<LiabilityItem, 'id'>) => void;
+  removeLiability: (id: string) => void;
   setSelectedCategory: (category: string) => void;
   setSearchQuery: (query: string) => void;
   setIsAddTransactionOpen: (open: boolean) => void;
