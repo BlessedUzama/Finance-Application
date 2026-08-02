@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useFinance } from '../../context/FinanceContext';
 import type { ComputedBudgetProgress } from '../../types/finance';
 import { CategoryManagerModal } from './CategoryManagerModal';
@@ -22,22 +23,22 @@ export const BudgetCategoryRow: React.FC<{
     : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
 
   return (
-    <div className="group flex flex-col space-y-2 rounded-xl border border-slate-800/80 bg-slate-900/40 p-4 transition-all duration-200 hover:border-slate-700 hover:bg-slate-900/80">
+    <div className="group flex flex-col space-y-2 rounded-xl border border-slate-800/80 bg-slate-900/40 p-3.5 transition-all duration-200 hover:border-slate-700 hover:bg-slate-900/80">
       {/* Top Header */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <span className="text-sm">{budget.icon || '🏷️'}</span>
-          <span className="text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">
+          <span className="text-xs font-semibold text-white group-hover:text-blue-300 transition-colors truncate max-w-[140px]">
             {budget.category}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${badgeColor}`}>
+        <div className="flex items-center gap-1.5">
+          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${badgeColor}`}>
             {budget.isOverBudget
               ? 'Exceeded'
               : budget.isWarning
-              ? 'Warning (80%+)'
+              ? 'Warning'
               : 'On Track'}
           </span>
           <button
@@ -51,7 +52,7 @@ export const BudgetCategoryRow: React.FC<{
       </div>
 
       {/* Numerical Stats Row */}
-      <div className="flex items-baseline justify-between text-xs font-mono">
+      <div className="flex items-baseline justify-between text-[11px] font-mono">
         <div className="text-slate-400">
           Spent: <span className="font-semibold text-white">{formatCurrency(budget.spentAmount)}</span>
         </div>
@@ -61,7 +62,7 @@ export const BudgetCategoryRow: React.FC<{
       </div>
 
       {/* Progress Bar Track */}
-      <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-800">
+      <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
         <div
           className={`h-full rounded-full transition-all duration-500 ease-out shadow-sm ${progressColor}`}
           style={{ width: `${Math.min(budget.percentageUsed, 100)}%` }}
@@ -69,8 +70,8 @@ export const BudgetCategoryRow: React.FC<{
       </div>
 
       {/* Bottom Percentage Footer */}
-      <div className="flex items-center justify-between text-[11px] text-slate-500">
-        <span>{budget.percentageUsed}% of limit</span>
+      <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+        <span>{budget.percentageUsed}% used</span>
         <span>
           {budget.remainingAmount >= 0
             ? `${formatCurrency(budget.remainingAmount)} left`
@@ -105,13 +106,18 @@ export const BudgetTracker: React.FC = () => {
   const totalPercentage = totalAllocated > 0 ? Math.round((totalSpent / totalAllocated) * 100) : 0;
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-5 shadow-xl">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
       <CategoryManagerModal isOpen={isCategoryModalOpen} onClose={() => setIsCategoryModalOpen(false)} />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800/80 pb-3">
         <div>
-          <h3 className="text-base font-semibold text-white">Monthly Budget Limits</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-semibold text-white">Monthly Budget Limits</h3>
+            <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-blue-400 border border-blue-500/20">
+              {budgetProgress.length} Categories
+            </span>
+          </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Category allocation rules & live expense tracking.
           </p>
@@ -136,63 +142,65 @@ export const BudgetTracker: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid of Budget Rows */}
-      <div className="grid grid-cols-1 gap-3">
+      {/* 2-Column Responsive Grid for Compact Height */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {budgetProgress.map((budget) => (
           <BudgetCategoryRow key={budget.id} budget={budget} onEdit={handleOpenEdit} />
         ))}
       </div>
 
-      {/* Edit Limit Dialog Modal */}
-      {editingBudget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-2xl space-y-4 text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h4 className="text-sm font-semibold text-white">
-                Edit {editingBudget.category} Limit
-              </h4>
-              <button
-                onClick={() => setEditingBudget(null)}
-                className="text-slate-400 hover:text-white text-xs p-1"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveEdit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
-                  New Allocated Amount ($)
-                </label>
-                <input
-                  type="number"
-                  step="10"
-                  required
-                  value={newAllocation}
-                  onChange={(e) => setNewAllocation(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm font-mono text-white focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+      {/* Edit Limit Dialog Modal - Portal */}
+      {editingBudget &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-150">
+            <div className="w-full max-w-sm rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-2xl space-y-4 text-slate-100">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h4 className="text-sm font-semibold text-white">
+                  Edit {editingBudget.category} Limit
+                </h4>
                 <button
-                  type="button"
                   onClick={() => setEditingBudget(null)}
-                  className="rounded-lg border border-slate-800 px-3 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
+                  className="text-slate-400 hover:text-white text-xs p-1 cursor-pointer"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/20"
-                >
-                  Save Limit
+                  ✕
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <form onSubmit={handleSaveEdit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1">
+                    New Allocated Amount ($)
+                  </label>
+                  <input
+                    type="number"
+                    step="10"
+                    required
+                    value={newAllocation}
+                    onChange={(e) => setNewAllocation(e.target.value)}
+                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm font-mono text-white focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setEditingBudget(null)}
+                    className="rounded-lg border border-slate-800 px-3 py-1.5 text-xs text-slate-300 hover:bg-slate-800 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all"
+                  >
+                    Save Limit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
