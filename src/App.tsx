@@ -3,7 +3,6 @@ import { FinanceProvider } from './context/FinanceContext';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { MetricsGrid } from './components/dashboard/MetricsGrid';
 import { BudgetTracker } from './components/dashboard/BudgetTracker';
-import { CashFlowChart } from './components/dashboard/CashFlowChart';
 import { NetWorthTracker } from './components/dashboard/NetWorthTracker';
 import { SavingsGoals } from './components/dashboard/SavingsGoals';
 import { SubscriptionsMonitor } from './components/dashboard/SubscriptionsMonitor';
@@ -16,7 +15,6 @@ export const App: React.FC = () => {
       <DashboardLayout
         metricsSlot={<MetricsGrid />}
         budgetTrackerSlot={<BudgetTracker />}
-        analyticsChartSlot={<CashFlowChart />}
         netWorthSlot={<NetWorthTracker />}
         savingsGoalsSlot={<SavingsGoals />}
         subscriptionsSlot={<SubscriptionsMonitor />}

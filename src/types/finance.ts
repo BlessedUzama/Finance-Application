@@ -117,6 +117,7 @@ export interface FinanceContextType {
   addSavingsGoal: (goal: Omit<SavingsGoal, 'id'>) => void;
   depositSavingsGoal: (id: string, amount: number) => void;
   addSubscription: (subscription: Omit<SubscriptionItem, 'id'>) => void;
+  removeSubscription: (id: string) => void;
   markSubscriptionPaid: (subscriptionId: string) => void;
   addAsset: (asset: Omit<AssetItem, 'id'>) => void;
   removeAsset: (id: string) => void;

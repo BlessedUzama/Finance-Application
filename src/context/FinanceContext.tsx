@@ -139,7 +139,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, [budgets, transactions]);
 
-  // 3. Derive Filtered Transactions for Table View (Includes Tag Search)
+  // 3. Derive Filtered Transactions for Table View
   const filteredTransactions = useMemo<Transaction[]>(() => {
     return transactions.filter((t) => {
       const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
@@ -223,6 +223,10 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     setSubscriptions((prev) => [...prev, newSub]);
   };
 
+  const removeSubscription = (id: string) => {
+    setSubscriptions((prev) => prev.filter((s) => s.id !== id));
+  };
+
   const markSubscriptionPaid = (subscriptionId: string) => {
     const targetSub = subscriptions.find((s) => s.id === subscriptionId);
     if (!targetSub) return;
@@ -294,6 +298,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     addSavingsGoal,
     depositSavingsGoal,
     addSubscription,
+    removeSubscription,
     markSubscriptionPaid,
     addAsset,
     removeAsset,

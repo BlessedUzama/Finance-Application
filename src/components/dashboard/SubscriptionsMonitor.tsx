@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 
 export const SubscriptionsMonitor: React.FC = () => {
-  const { subscriptions, addSubscription, formatCurrency } = useFinance();
+  const { subscriptions, addSubscription, removeSubscription, formatCurrency } = useFinance();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const [name, setName] = useState('');
@@ -73,7 +73,7 @@ export const SubscriptionsMonitor: React.FC = () => {
         {subscriptions.map((sub) => (
           <div
             key={sub.id}
-            className="flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-900/40 p-3.5 hover:border-slate-700 hover:bg-slate-900/80 transition-all"
+            className="group flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-900/40 p-3.5 hover:border-slate-700 hover:bg-slate-900/80 transition-all"
           >
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-base">
@@ -85,9 +85,18 @@ export const SubscriptionsMonitor: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-right font-mono">
-              <span className="text-xs font-bold text-white block">{formatCurrency(sub.cost)}</span>
-              <span className="text-[10px] text-slate-500 block">{sub.billingCycle}</span>
+            <div className="flex items-center gap-2">
+              <div className="text-right font-mono">
+                <span className="text-xs font-bold text-white block">{formatCurrency(sub.cost)}</span>
+                <span className="text-[10px] text-slate-500 block">{sub.billingCycle}</span>
+              </div>
+              <button
+                onClick={() => removeSubscription(sub.id)}
+                className="text-slate-500 hover:text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-xs"
+                title="Remove Subscription"
+              >
+                ✕
+              </button>
             </div>
           </div>
         ))}

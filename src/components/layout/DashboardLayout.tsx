@@ -6,7 +6,6 @@ import type { CurrencyCode } from '../../types/finance';
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
   budgetTrackerSlot?: ReactNode;
-  analyticsChartSlot?: ReactNode;
   netWorthSlot?: ReactNode;
   savingsGoalsSlot?: ReactNode;
   subscriptionsSlot?: ReactNode;
@@ -17,7 +16,6 @@ interface DashboardLayoutProps {
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   metricsSlot,
   budgetTrackerSlot,
-  analyticsChartSlot,
   netWorthSlot,
   savingsGoalsSlot,
   subscriptionsSlot,
@@ -114,7 +112,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               Financial Operations Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Real-time cashflow analytics, category budgets, savings goals, net worth, and multi-currency ledger.
+              Real-time category budgets, savings goals, net worth, bill calendar, and multi-currency ledger.
             </p>
           </div>
 
@@ -204,11 +202,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         {/* Level 2: Financial Metrics Overview Slot */}
         <section>{metricsSlot}</section>
 
-        {/* Level 3: Mid Section (Budget Tracker & Analytics Chart) */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7">{budgetTrackerSlot}</div>
-          <div className="lg:col-span-5">{analyticsChartSlot}</div>
-        </section>
+        {/* Level 3: Budget Tracker Section */}
+        {budgetTrackerSlot && <section>{budgetTrackerSlot}</section>}
 
         {/* Level 4: Net Worth & Balance Sheet Section */}
         {netWorthSlot && <section>{netWorthSlot}</section>}
