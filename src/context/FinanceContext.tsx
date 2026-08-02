@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import type {
   Transaction,
   Budget,
@@ -11,6 +11,7 @@ import type {
   FinanceContextType,
   CurrencyCode,
   CurrencyConfig,
+  ThemeMode,
 } from '../types/finance';
 
 const CURRENCY_CONFIGS: Record<CurrencyCode, CurrencyConfig> = {
@@ -80,6 +81,40 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddTransactionOpen, setIsAddTransactionOpen] = useState<boolean>(false);
   const [currentCurrency, setCurrentCurrency] = useState<CurrencyCode>('USD');
+  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
+
+  // Automatic System Default Theme Sync Effect
+  useEffect(() => {
+    const root = document.documentElement;
+
+    const applyTheme = () => {
+      if (themeMode === 'system') {
+        const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.setAttribute('data-theme', isSystemDark ? 'dark' : 'light');
+        if (isSystemDark) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      } else {
+        root.setAttribute('data-theme', themeMode);
+        if (themeMode === 'dark') {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      }
+    };
+
+    applyTheme();
+
+    if (themeMode === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = () => applyTheme();
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, [themeMode]);
 
   const currencyConfig = CURRENCY_CONFIGS[currentCurrency];
   const availableCurrencies = Object.values(CURRENCY_CONFIGS);
@@ -279,6 +314,8 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     selectedCategory,
     searchQuery,
     isAddTransactionOpen,
+    themeMode,
+    setThemeMode,
     currentCurrency,
     currencyConfig,
     availableCurrencies,

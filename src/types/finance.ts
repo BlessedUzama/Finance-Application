@@ -1,6 +1,7 @@
 export type TransactionType = 'income' | 'expense';
 export type TransactionStatus = 'completed' | 'pending';
 export type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'NGN' | 'CAD';
+export type ThemeMode = 'system' | 'light' | 'dark';
 
 export interface CurrencyConfig {
   code: CurrencyCode;
@@ -93,7 +94,9 @@ export interface FinanceContextType {
   searchQuery: string;
   isAddTransactionOpen: boolean;
   
-  // Multi-Currency State
+  // Theme & Currency State
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
   currentCurrency: CurrencyCode;
   currencyConfig: CurrencyConfig;
   availableCurrencies: CurrencyConfig[];

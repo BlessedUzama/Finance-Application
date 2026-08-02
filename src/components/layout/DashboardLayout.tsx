@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddTransactionModal } from '../dashboard/AddTransactionModal';
-import type { CurrencyCode } from '../../types/finance';
+import type { CurrencyCode, ThemeMode } from '../../types/finance';
 
 interface DashboardLayoutProps {
   metricsSlot?: ReactNode;
@@ -30,6 +30,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     currentCurrency,
     availableCurrencies,
     setCurrentCurrency,
+    themeMode,
+    setThemeMode,
     formatCurrency,
   } = useFinance();
 
@@ -48,7 +50,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
+    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-100 dark:text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
       {/* Root Fixed Add Transaction Modal Overlay */}
       <AddTransactionModal />
 
@@ -70,17 +72,34 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           </div>
 
-          {/* Currency Switcher & Action Controls */}
-          <div className="flex items-center gap-3">
+          {/* Theme & Currency Switchers & Controls */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* System / Light / Dark Theme Selector */}
+            <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
+              <span className="text-xs">
+                {themeMode === 'system' ? '💻' : themeMode === 'light' ? '☀️' : '🌙'}
+              </span>
+              <select
+                value={themeMode}
+                onChange={(e) => setThemeMode(e.target.value as ThemeMode)}
+                className="bg-transparent text-white font-sans font-semibold focus:outline-none cursor-pointer text-xs"
+                title="Select Theme Mode (System Default supported)"
+              >
+                <option value="system" className="bg-slate-900 text-white">System Auto</option>
+                <option value="dark" className="bg-slate-900 text-white">Dark Mode</option>
+                <option value="light" className="bg-slate-900 text-white">Light Mode</option>
+              </select>
+            </div>
+
             {/* Multi-Currency Switcher Dropdown */}
-            <div className="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300">
+            <div className="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
               <svg className="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <select
                 value={currentCurrency}
                 onChange={(e) => setCurrentCurrency(e.target.value as CurrencyCode)}
-                className="bg-transparent text-white font-mono font-semibold focus:outline-none cursor-pointer"
+                className="bg-transparent text-white font-mono font-semibold focus:outline-none cursor-pointer text-xs"
               >
                 {availableCurrencies.map((c) => (
                   <option key={c.code} value={c.code} className="bg-slate-900 text-white">
@@ -90,19 +109,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </select>
             </div>
 
-            <div className="hidden sm:flex items-center rounded-lg bg-slate-900 border border-slate-800 p-1 text-xs font-medium text-slate-400">
-              <button className="rounded-md bg-slate-800 px-3 py-1 text-white shadow-sm transition-all cursor-pointer">
-                This Month
-              </button>
-              <button className="px-3 py-1 hover:text-slate-200 transition-colors cursor-pointer">Quarter</button>
-              <button className="px-3 py-1 hover:text-slate-200 transition-colors cursor-pointer">Year</button>
-            </div>
-
             <button
               onClick={() => setIsAddTransactionOpen(true)}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
             >
-              <span>+ Add Transaction</span>
+              <span>+ Add Entry</span>
             </button>
           </div>
         </div>
