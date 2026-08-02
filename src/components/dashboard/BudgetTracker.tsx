@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import type { ComputedBudgetProgress } from '../../types/finance';
+import { CategoryManagerModal } from './CategoryManagerModal';
 
 export const BudgetCategoryRow: React.FC<{
   budget: ComputedBudgetProgress;
@@ -8,7 +9,6 @@ export const BudgetCategoryRow: React.FC<{
 }> = ({ budget, onEdit }) => {
   const { formatCurrency } = useFinance();
 
-  // Color indicator based on usage ratio
   const progressColor = budget.isOverBudget
     ? 'bg-rose-500 shadow-rose-500/30'
     : budget.isWarning
@@ -23,13 +23,10 @@ export const BudgetCategoryRow: React.FC<{
 
   return (
     <div className="group flex flex-col space-y-2 rounded-xl border border-slate-800/80 bg-slate-900/40 p-4 transition-all duration-200 hover:border-slate-700 hover:bg-slate-900/80">
-      {/* Top Header: Category Name, Status Badge, Edit Control */}
+      {/* Top Header */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <span
-            className="h-3 w-3 rounded-full border border-white/20"
-            style={{ backgroundColor: budget.color || '#3B82F6' }}
-          />
+          <span className="text-sm">{budget.icon || '🏷️'}</span>
           <span className="text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">
             {budget.category}
           </span>
@@ -88,6 +85,7 @@ export const BudgetTracker: React.FC = () => {
   const { budgetProgress, updateBudget, formatCurrency } = useFinance();
   const [editingBudget, setEditingBudget] = useState<ComputedBudgetProgress | null>(null);
   const [newAllocation, setNewAllocation] = useState<string>('');
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const handleOpenEdit = (b: ComputedBudgetProgress) => {
     setEditingBudget(b);
@@ -108,6 +106,8 @@ export const BudgetTracker: React.FC = () => {
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-5 shadow-xl">
+      <CategoryManagerModal isOpen={isCategoryModalOpen} onClose={() => setIsCategoryModalOpen(false)} />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800/80 pb-4">
         <div>
@@ -117,7 +117,7 @@ export const BudgetTracker: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 text-xs font-mono">
           <div className="rounded-lg bg-slate-950 px-3 py-1.5 border border-slate-800">
             <span className="text-slate-400">Total Spent: </span>
             <span className="font-bold text-white">{formatCurrency(totalSpent)}</span>
@@ -126,6 +126,13 @@ export const BudgetTracker: React.FC = () => {
               {totalPercentage}%
             </span>
           </div>
+
+          <button
+            onClick={() => setIsCategoryModalOpen(true)}
+            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            + Category
+          </button>
         </div>
       </div>
 

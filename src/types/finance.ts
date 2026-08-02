@@ -112,6 +112,7 @@ export interface FinanceContextType {
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
   importTransactions: (transactions: Omit<Transaction, 'id'>[]) => void;
   removeTransaction: (id: string) => void;
+  addBudgetCategory: (category: Omit<Budget, 'id'>) => void;
   updateBudget: (categoryId: string, newAllocation: number) => void;
   addSavingsGoal: (goal: Omit<SavingsGoal, 'id'>) => void;
   depositSavingsGoal: (id: string, amount: number) => void;

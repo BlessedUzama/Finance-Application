@@ -141,10 +141,10 @@ export const TransactionTable: React.FC = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search history..."
+              placeholder="Search history & #tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-32 sm:w-40 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+              className="w-32 sm:w-44 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none font-sans"
             />
             {searchQuery && (
               <button
@@ -292,7 +292,17 @@ export const TransactionTable: React.FC = () => {
                       }`}>
                         {tx.type === 'income' ? '⇣' : '⇡'}
                       </span>
-                      <span>{tx.merchant}</span>
+                      <div className="flex items-center gap-2">
+                        <span>{tx.merchant}</span>
+                        {tx.tag && (
+                          <button
+                            onClick={() => setSearchQuery(tx.tag!)}
+                            className="rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-mono text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+                          >
+                            {tx.tag}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td className="py-3.5 px-4">

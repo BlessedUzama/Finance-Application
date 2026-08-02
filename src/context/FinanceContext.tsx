@@ -30,14 +30,14 @@ const INITIAL_BUDGETS: Budget[] = [
 ];
 
 const INITIAL_TRANSACTIONS: Transaction[] = [
-  { id: 't-1', date: '2026-07-28', merchant: 'Employer Direct Deposit', category: 'Salary', amount: 5200, type: 'income', status: 'completed' },
-  { id: 't-2', date: '2026-07-27', merchant: 'Apex Luxury Apartments', category: 'Housing & Utilities', amount: 1450, type: 'expense', status: 'completed' },
-  { id: 't-3', date: '2026-07-26', merchant: 'Whole Foods Market', category: 'Groceries & Dining', amount: 184.20, type: 'expense', status: 'completed' },
-  { id: 't-4', date: '2026-07-25', merchant: 'Freelance Design Retainer', category: 'Freelance', amount: 850, type: 'income', status: 'completed' },
-  { id: 't-5', date: '2026-07-24', merchant: 'Trader Joe\'s', category: 'Groceries & Dining', amount: 92.50, type: 'expense', status: 'completed' },
-  { id: 't-6', date: '2026-07-23', merchant: 'Electric & Power Co.', category: 'Housing & Utilities', amount: 142.00, type: 'expense', status: 'completed' },
-  { id: 't-7', date: '2026-07-22', merchant: 'Uber Rideshare', category: 'Transportation', amount: 34.80, type: 'expense', status: 'completed' },
-  { id: 't-8', date: '2026-07-21', merchant: 'Cinema & Concert Tickets', category: 'Entertainment & Leisure', amount: 120.00, type: 'expense', status: 'pending' },
+  { id: 't-1', date: '2026-07-28', merchant: 'Employer Direct Deposit', category: 'Salary', amount: 5200, type: 'income', status: 'completed', tag: '#income' },
+  { id: 't-2', date: '2026-07-27', merchant: 'Apex Luxury Apartments', category: 'Housing & Utilities', amount: 1450, type: 'expense', status: 'completed', tag: '#essential' },
+  { id: 't-3', date: '2026-07-26', merchant: 'Whole Foods Market', category: 'Groceries & Dining', amount: 184.20, type: 'expense', status: 'completed', tag: '#personal' },
+  { id: 't-4', date: '2026-07-25', merchant: 'Freelance Design Retainer', category: 'Freelance', amount: 850, type: 'income', status: 'completed', tag: '#business' },
+  { id: 't-5', date: '2026-07-24', merchant: 'Trader Joe\'s', category: 'Groceries & Dining', amount: 92.50, type: 'expense', status: 'completed', tag: '#personal' },
+  { id: 't-6', date: '2026-07-23', merchant: 'Electric & Power Co.', category: 'Housing & Utilities', amount: 142.00, type: 'expense', status: 'completed', tag: '#essential' },
+  { id: 't-7', date: '2026-07-22', merchant: 'Uber Rideshare', category: 'Transportation', amount: 34.80, type: 'expense', status: 'completed', tag: '#reimbursable' },
+  { id: 't-8', date: '2026-07-21', merchant: 'Cinema & Concert Tickets', category: 'Entertainment & Leisure', amount: 120.00, type: 'expense', status: 'pending', tag: '#leisure' },
 ];
 
 const INITIAL_SAVINGS_GOALS: SavingsGoal[] = [
@@ -139,7 +139,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, [budgets, transactions]);
 
-  // 3. Derive Filtered Transactions for Table View
+  // 3. Derive Filtered Transactions for Table View (Includes Tag Search)
   const filteredTransactions = useMemo<Transaction[]>(() => {
     return transactions.filter((t) => {
       const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
@@ -151,8 +151,9 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       const matchesCategoryName = t.category ? t.category.toLowerCase().includes(query) : false;
       const matchesAmount = t.amount !== undefined ? t.amount.toString().includes(query) : false;
       const matchesDate = t.date ? t.date.toLowerCase().includes(query) : false;
+      const matchesTag = t.tag ? t.tag.toLowerCase().includes(query) : false;
 
-      return matchesCategory && (matchesMerchant || matchesCategoryName || matchesAmount || matchesDate);
+      return matchesCategory && (matchesMerchant || matchesCategoryName || matchesAmount || matchesDate || matchesTag);
     });
   }, [transactions, selectedCategory, searchQuery]);
 
@@ -180,6 +181,14 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const removeTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const addBudgetCategory = (catData: Omit<Budget, 'id'>) => {
+    const newCat: Budget = {
+      ...catData,
+      id: `b-${Date.now()}`,
+    };
+    setBudgets((prev) => [...prev, newCat]);
   };
 
   const updateBudget = (categoryId: string, newAllocation: number) => {
@@ -280,6 +289,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     addTransaction,
     importTransactions,
     removeTransaction,
+    addBudgetCategory,
     updateBudget,
     addSavingsGoal,
     depositSavingsGoal,

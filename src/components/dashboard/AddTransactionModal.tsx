@@ -10,6 +10,7 @@ export const AddTransactionModal: React.FC = () => {
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [status, setStatus] = useState<'completed' | 'pending'>('completed');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [tag, setTag] = useState('#personal');
 
   if (!isAddTransactionOpen) return null;
 
@@ -24,6 +25,7 @@ export const AddTransactionModal: React.FC = () => {
       amount: Number(amount),
       type,
       status,
+      tag: tag.startsWith('#') ? tag : `#${tag}`,
     });
 
     setMerchant('');
@@ -121,15 +123,32 @@ export const AddTransactionModal: React.FC = () => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Date</label>
-            <input
-              type="date"
-              required
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3.5 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Date</label>
+              <input
+                type="date"
+                required
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3.5 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Tag / Label</label>
+              <select
+                value={tag}
+                onChange={(e) => setTag(e.target.value)}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3.5 py-2 text-xs text-white focus:border-blue-500 focus:outline-none cursor-pointer font-mono"
+              >
+                <option value="#personal">#personal</option>
+                <option value="#business">#business</option>
+                <option value="#tax-deductible">#tax-deductible</option>
+                <option value="#reimbursable">#reimbursable</option>
+                <option value="#essential">#essential</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
