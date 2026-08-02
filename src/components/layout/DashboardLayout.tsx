@@ -25,7 +25,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const handleSearchFocus = () => {
     setIsSearchFocused(true);
-    // Smooth scroll down to transaction history section automatically
+  };
+
+  const handleResultClick = () => {
+    setIsSearchFocused(false);
+    // Smooth scroll down to transaction history section ONLY when a search result item is clicked
     const element = document.getElementById('transaction-history');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -126,13 +130,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       filteredTransactions.map((tx) => (
                         <div
                           key={tx.id}
-                          onClick={() => {
-                            setIsSearchFocused(false);
-                            const element = document.getElementById('transaction-history');
-                            if (element) {
-                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                          }}
+                          onClick={handleResultClick}
                           className="flex items-center justify-between py-2 px-2 hover:bg-slate-800/60 rounded-md cursor-pointer transition-colors"
                         >
                           <div>
