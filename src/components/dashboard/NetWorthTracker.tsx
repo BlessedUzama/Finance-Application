@@ -65,40 +65,40 @@ export const NetWorthTracker: React.FC = () => {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-5 shadow-xl">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 p-5 backdrop-blur-md space-y-5 shadow-sm dark:shadow-xl">
       {/* Top Header & Net Worth Gauge Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-white">Net Worth & Portfolio Balance Sheet</h3>
-            <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-mono font-semibold text-emerald-400 border border-emerald-500/20">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">Net Worth & Portfolio Balance Sheet</h3>
+            <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               Live Balance
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Total Assets (Owned) minus Total Liabilities (Owed).
           </p>
         </div>
 
         {/* Big Net Worth Summary Card */}
-        <div className="flex flex-wrap items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-4 bg-slate-100 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs">
           <div>
-            <span className="text-slate-500 block text-[10px]">TOTAL ASSETS (+)</span>
-            <span className="text-emerald-400 font-bold text-sm">{formatCurrency(totalAssets)}</span>
+            <span className="text-slate-500 dark:text-slate-500 block text-[10px]">TOTAL ASSETS (+)</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">{formatCurrency(totalAssets)}</span>
           </div>
 
-          <div className="h-6 w-px bg-slate-800" />
+          <div className="h-6 w-px bg-slate-300 dark:bg-slate-800" />
 
           <div>
-            <span className="text-slate-500 block text-[10px]">TOTAL LIABILITIES (-)</span>
-            <span className="text-rose-400 font-bold text-sm">{formatCurrency(totalLiabilities)}</span>
+            <span className="text-slate-500 dark:text-slate-500 block text-[10px]">TOTAL LIABILITIES (-)</span>
+            <span className="text-rose-600 dark:text-rose-400 font-bold text-sm">{formatCurrency(totalLiabilities)}</span>
           </div>
 
-          <div className="h-6 w-px bg-slate-800" />
+          <div className="h-6 w-px bg-slate-300 dark:bg-slate-800" />
 
-          <div className="bg-blue-600/20 px-3 py-1.5 rounded-lg border border-blue-500/30">
-            <span className="text-blue-300 block text-[10px] font-sans font-semibold">NET WORTH</span>
-            <span className="text-white font-bold text-base">{formatCurrency(netWorth)}</span>
+          <div className="bg-blue-500/10 dark:bg-blue-600/20 px-3 py-1.5 rounded-lg border border-blue-500/30">
+            <span className="text-blue-600 dark:text-blue-300 block text-[10px] font-sans font-semibold">NET WORTH</span>
+            <span className="text-slate-900 dark:text-white font-bold text-base">{formatCurrency(netWorth)}</span>
           </div>
         </div>
       </div>
@@ -110,13 +110,13 @@ export const NetWorthTracker: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm">💎</span>
-              <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
+              <h4 className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-wider">
                 Assets ({assets.length})
               </h4>
             </div>
             <button
               onClick={() => setIsAddAssetOpen(true)}
-              className="rounded-lg bg-emerald-600/20 px-2.5 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white transition-all cursor-pointer"
+              className="rounded-lg bg-emerald-600/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white transition-all cursor-pointer"
             >
               + Add Asset
             </button>
@@ -126,23 +126,23 @@ export const NetWorthTracker: React.FC = () => {
             {assets.map((asset) => (
               <div
                 key={asset.id}
-                className="group flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-950/40 p-3 hover:border-slate-700 hover:bg-slate-900/60 transition-all"
+                className="group flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 p-3 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-base">{asset.icon}</span>
                   <div>
-                    <h5 className="text-xs font-semibold text-white">{asset.name}</h5>
-                    <span className="text-[10px] text-slate-400">{asset.category}</span>
+                    <h5 className="text-xs font-semibold text-slate-900 dark:text-white">{asset.name}</h5>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{asset.category}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="font-mono font-bold text-xs text-emerald-400">
+                  <span className="font-mono font-bold text-xs text-emerald-600 dark:text-emerald-400">
                     +{formatCurrency(asset.value)}
                   </span>
                   <button
                     onClick={() => removeAsset(asset.id)}
-                    className="text-slate-500 hover:text-rose-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                    className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity p-1 cursor-pointer"
                     title="Delete Asset"
                   >
                     ✕
@@ -158,13 +158,13 @@ export const NetWorthTracker: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm">💳</span>
-              <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
+              <h4 className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-wider">
                 Liabilities ({liabilities.length})
               </h4>
             </div>
             <button
               onClick={() => setIsAddLiabilityOpen(true)}
-              className="rounded-lg bg-rose-600/20 px-2.5 py-1 text-xs font-semibold text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white transition-all cursor-pointer"
+              className="rounded-lg bg-rose-600/20 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white transition-all cursor-pointer"
             >
               + Add Liability
             </button>
@@ -174,23 +174,23 @@ export const NetWorthTracker: React.FC = () => {
             {liabilities.map((item) => (
               <div
                 key={item.id}
-                className="group flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-950/40 p-3 hover:border-slate-700 hover:bg-slate-900/60 transition-all"
+                className="group flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 p-3 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-base">{item.icon}</span>
                   <div>
-                    <h5 className="text-xs font-semibold text-white">{item.name}</h5>
-                    <span className="text-[10px] text-slate-400">{item.category}</span>
+                    <h5 className="text-xs font-semibold text-slate-900 dark:text-white">{item.name}</h5>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{item.category}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="font-mono font-bold text-xs text-rose-400">
+                  <span className="font-mono font-bold text-xs text-rose-600 dark:text-rose-400">
                     -{formatCurrency(item.amount)}
                   </span>
                   <button
                     onClick={() => removeLiability(item.id)}
-                    className="text-slate-500 hover:text-rose-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                    className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity p-1 cursor-pointer"
                     title="Delete Liability"
                   >
                     ✕
@@ -205,47 +205,47 @@ export const NetWorthTracker: React.FC = () => {
       {/* Add Asset Modal - React Portal */}
       {isAddAssetOpen &&
         ReactDOM.createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-            <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-4 text-slate-100">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h4 className="text-sm font-semibold text-white">Add Asset Item</h4>
-                <button onClick={() => setIsAddAssetOpen(false)} className="text-slate-400 hover:text-white text-xs p-1 cursor-pointer">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200">
+            <div className="w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-4 text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h4 className="text-sm font-semibold text-slate-900 dark:text-white">Add Asset Item</h4>
+                <button onClick={() => setIsAddAssetOpen(false)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs p-1 cursor-pointer">
                   ✕
                 </button>
               </div>
 
               <form onSubmit={handleAssetSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Asset Name</label>
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Asset Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Robinhood Portfolio, Savings Account"
                     value={assetName}
                     onChange={(e) => setAssetName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-400 mb-1">Estimated Value ($)</label>
+                    <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Estimated Value ($)</label>
                     <input
                       type="number"
                       required
                       placeholder="15000"
                       value={assetValue}
                       onChange={(e) => setAssetValue(e.target.value)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none font-mono"
+                      className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-400 mb-1">Category</label>
+                    <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Category</label>
                     <select
                       value={assetCategory}
                       onChange={(e) => setAssetCategory(e.target.value as any)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="Cash & Savings">Cash & Savings</option>
                       <option value="Investments">Investments</option>
@@ -257,21 +257,21 @@ export const NetWorthTracker: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Icon Emoji</label>
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Icon Emoji</label>
                   <input
                     type="text"
                     required
                     value={assetIcon}
                     onChange={(e) => setAssetIcon(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => setIsAddAssetOpen(false)}
-                    className="rounded-lg border border-slate-800 px-3 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
+                    className="rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     Cancel
                   </button>
@@ -291,47 +291,47 @@ export const NetWorthTracker: React.FC = () => {
       {/* Add Liability Modal - React Portal */}
       {isAddLiabilityOpen &&
         ReactDOM.createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-            <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-4 text-slate-100">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h4 className="text-sm font-semibold text-white">Add Liability / Debt Item</h4>
-                <button onClick={() => setIsAddLiabilityOpen(false)} className="text-slate-400 hover:text-white text-xs p-1 cursor-pointer">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200">
+            <div className="w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-4 text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h4 className="text-sm font-semibold text-slate-900 dark:text-white">Add Liability / Debt Item</h4>
+                <button onClick={() => setIsAddLiabilityOpen(false)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs p-1 cursor-pointer">
                   ✕
                 </button>
               </div>
 
               <form onSubmit={handleLiabilitySubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Liability Name</label>
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Liability Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Chase Sapphire Reserve, Car Loan"
                     value={liabilityName}
                     onChange={(e) => setLiabilityName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-400 mb-1">Owed Amount ($)</label>
+                    <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Owed Amount ($)</label>
                     <input
                       type="number"
                       required
                       placeholder="3500"
                       value={liabilityAmount}
                       onChange={(e) => setLiabilityAmount(e.target.value)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none font-mono"
+                      className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-400 mb-1">Category</label>
+                    <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Category</label>
                     <select
                       value={liabilityCategory}
                       onChange={(e) => setLiabilityCategory(e.target.value as any)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="Credit Cards">Credit Cards</option>
                       <option value="Mortgages">Mortgages</option>
@@ -343,21 +343,21 @@ export const NetWorthTracker: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Icon Emoji</label>
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Icon Emoji</label>
                   <input
                     type="text"
                     required
                     value={liabilityIcon}
                     onChange={(e) => setLiabilityIcon(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => setIsAddLiabilityOpen(false)}
-                    className="rounded-lg border border-slate-800 px-3 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
+                    className="rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     Cancel
                   </button>

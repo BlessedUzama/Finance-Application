@@ -75,30 +75,30 @@ export const TransactionTable: React.FC = () => {
   };
 
   return (
-    <div id="transaction-history-table" className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-xl">
+    <div id="transaction-history-table" className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 p-5 backdrop-blur-md space-y-4 shadow-sm dark:shadow-xl">
       {/* Multi-Format Import Modal Dialog */}
       <DataImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
 
       {/* Header & Main Controls Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-white">Transaction History</h3>
-            <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs font-mono font-semibold text-blue-400 border border-slate-700">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">Transaction History</h3>
+            <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700">
               {processedTransactions.length} Entries
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">Filter, sort, and inspect real-time transaction records.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Filter, sort, and inspect real-time transaction records.</p>
         </div>
 
         {/* Toolbar Controls */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Income / Expense Tabs */}
-          <div className="flex items-center rounded-lg bg-slate-950 p-1 border border-slate-800 text-xs font-medium">
+          <div className="flex items-center rounded-lg bg-slate-100 dark:bg-slate-950 p-1 border border-slate-200 dark:border-slate-800 text-xs font-medium">
             <button
               onClick={() => setTypeFilter('all')}
               className={`rounded-md px-2.5 py-1 transition-all cursor-pointer ${
-                typeFilter === 'all' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                typeFilter === 'all' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               All
@@ -106,7 +106,7 @@ export const TransactionTable: React.FC = () => {
             <button
               onClick={() => setTypeFilter('income')}
               className={`rounded-md px-2.5 py-1 transition-all cursor-pointer ${
-                typeFilter === 'income' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200'
+                typeFilter === 'income' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Income
@@ -114,7 +114,7 @@ export const TransactionTable: React.FC = () => {
             <button
               onClick={() => setTypeFilter('expense')}
               className={`rounded-md px-2.5 py-1 transition-all cursor-pointer ${
-                typeFilter === 'expense' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'text-slate-400 hover:text-slate-200'
+                typeFilter === 'expense' ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Expenses
@@ -125,7 +125,7 @@ export const TransactionTable: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none cursor-pointer"
+            className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 px-2.5 py-1.5 text-xs text-slate-900 dark:text-slate-200 focus:border-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Categories</option>
             {budgets.map((b) => (
@@ -144,12 +144,12 @@ export const TransactionTable: React.FC = () => {
               placeholder="Search history & #tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-32 sm:w-44 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none font-sans"
+              className="w-32 sm:w-44 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 px-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none font-sans"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1.5 text-xs text-slate-500 hover:text-white"
+                className="absolute right-2 top-1.5 text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white"
               >
                 ✕
               </button>
@@ -159,7 +159,7 @@ export const TransactionTable: React.FC = () => {
           {/* Multi-Format Import Button */}
           <button
             onClick={() => setIsImportModalOpen(true)}
-            className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+            className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             title="Import CSV, JSON, TSV, or TXT File"
           >
             📥 Import
@@ -169,7 +169,7 @@ export const TransactionTable: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
-              className="rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer flex items-center gap-1"
+              className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center gap-1"
               title="Select Export Format"
             >
               <span>📤 Export ({exportFormat.toUpperCase()})</span>
@@ -177,34 +177,34 @@ export const TransactionTable: React.FC = () => {
             </button>
 
             {isExportDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1.5 w-40 rounded-xl border border-slate-800 bg-slate-950 p-1.5 shadow-xl z-50 space-y-1 text-xs font-mono">
+              <div className="absolute right-0 top-full mt-1.5 w-40 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1.5 shadow-xl z-50 space-y-1 text-xs font-mono">
                 <button
                   onClick={() => handleExport('pdf')}
-                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-between"
                 >
                   <span>PDF (.pdf)</span>
-                  <span className="text-[10px] text-rose-400 font-semibold">Statement</span>
+                  <span className="text-[10px] text-rose-600 dark:text-rose-400 font-semibold">Statement</span>
                 </button>
                 <button
                   onClick={() => handleExport('csv')}
-                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-between"
                 >
                   <span>CSV (.csv)</span>
-                  <span className="text-[10px] text-blue-400">Excel</span>
+                  <span className="text-[10px] text-blue-600 dark:text-blue-400">Excel</span>
                 </button>
                 <button
                   onClick={() => handleExport('json')}
-                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-between"
                 >
                   <span>JSON (.json)</span>
-                  <span className="text-[10px] text-purple-400">Data</span>
+                  <span className="text-[10px] text-purple-600 dark:text-purple-400">Data</span>
                 </button>
                 <button
                   onClick={() => handleExport('txt')}
-                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition-colors flex items-center justify-between"
                 >
                   <span>Text (.txt)</span>
-                  <span className="text-[10px] text-emerald-400">Report</span>
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Report</span>
                 </button>
               </div>
             )}
@@ -219,14 +219,14 @@ export const TransactionTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Transaction Table Container */}
-      <div className="overflow-x-auto rounded-lg border border-slate-800/80 bg-slate-950/40">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="border-b border-slate-800 bg-slate-950/80 uppercase tracking-wider text-[11px] text-slate-400 font-semibold select-none">
+      {/* Transaction Table Container with Horizontal Scroll */}
+      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40">
+        <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+          <thead className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/80 uppercase tracking-wider text-[11px] text-slate-500 dark:text-slate-400 font-semibold select-none">
             <tr>
               <th
                 onClick={() => handleSort('date')}
-                className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
               >
                 <div className="flex items-center gap-1">
                   <span>Date</span>
@@ -235,7 +235,7 @@ export const TransactionTable: React.FC = () => {
               </th>
               <th
                 onClick={() => handleSort('merchant')}
-                className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
               >
                 <div className="flex items-center gap-1">
                   <span>Merchant / Source</span>
@@ -246,7 +246,7 @@ export const TransactionTable: React.FC = () => {
               <th className="py-3.5 px-4">Status</th>
               <th
                 onClick={() => handleSort('amount')}
-                className="py-3.5 px-4 text-right cursor-pointer hover:text-white transition-colors"
+                className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
               >
                 <div className="flex items-center justify-end gap-1">
                   <span>Amount</span>
@@ -256,12 +256,12 @@ export const TransactionTable: React.FC = () => {
               <th className="py-3.5 px-4 text-center">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 bg-slate-950/30">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 bg-white dark:bg-slate-950/30">
             {processedTransactions.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-slate-400 space-y-2">
-                  <p className="text-sm font-medium text-slate-300">No matching transactions found</p>
-                  <p className="text-xs text-slate-500">
+                <td colSpan={6} className="py-12 text-center text-slate-500 dark:text-slate-400 space-y-2">
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">No matching transactions found</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">
                     {searchQuery ? `No results for "${searchQuery}"` : 'Try clearing your active filters.'}
                   </p>
                   {(searchQuery || selectedCategory !== 'all' || typeFilter !== 'all') && (
@@ -271,7 +271,7 @@ export const TransactionTable: React.FC = () => {
                         setSelectedCategory('all');
                         setTypeFilter('all');
                       }}
-                      className="mt-2 inline-flex items-center rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                      className="mt-2 inline-flex items-center rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors"
                     >
                       Clear Filters & Search
                     </button>
@@ -282,13 +282,13 @@ export const TransactionTable: React.FC = () => {
               processedTransactions.map((tx) => (
                 <tr
                   key={tx.id}
-                  className="hover:bg-slate-800/50 transition-colors group"
+                  className="hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors group"
                 >
-                  <td className="py-3.5 px-4 font-mono text-slate-400">{tx.date}</td>
-                  <td className="py-3.5 px-4 font-medium text-white">
+                  <td className="py-3.5 px-4 font-mono text-slate-500 dark:text-slate-400">{tx.date}</td>
+                  <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-white">
                     <div className="flex items-center gap-2.5">
                       <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] ${
-                        tx.type === 'income' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'
+                        tx.type === 'income' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                       }`}>
                         {tx.type === 'income' ? '⇣' : '⇡'}
                       </span>
@@ -297,7 +297,7 @@ export const TransactionTable: React.FC = () => {
                         {tx.tag && (
                           <button
                             onClick={() => setSearchQuery(tx.tag!)}
-                            className="rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-mono text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+                            className="rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-mono text-blue-600 dark:text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors cursor-pointer"
                           >
                             {tx.tag}
                           </button>
@@ -306,7 +306,7 @@ export const TransactionTable: React.FC = () => {
                     </div>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center rounded-md bg-slate-800/80 px-2 py-0.5 text-[11px] font-medium text-slate-300 border border-slate-700/60">
+                    <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60">
                       {tx.category}
                     </span>
                   </td>
@@ -314,8 +314,8 @@ export const TransactionTable: React.FC = () => {
                     <span
                       className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                         tx.status === 'completed'
-                          ? 'bg-slate-800/80 text-slate-300 border border-slate-700'
-                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
                       }`}
                     >
                       {tx.status}
@@ -323,7 +323,7 @@ export const TransactionTable: React.FC = () => {
                   </td>
                   <td
                     className={`py-3.5 px-4 text-right font-mono font-semibold tabular-nums ${
-                      tx.type === 'income' ? 'text-emerald-400' : 'text-slate-100'
+                      tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-100'
                     }`}
                   >
                     {tx.type === 'income' ? '+' : '-'} {formatCurrency(tx.amount)}
@@ -331,7 +331,7 @@ export const TransactionTable: React.FC = () => {
                   <td className="py-3.5 px-4 text-center">
                     <button
                       onClick={() => removeTransaction(tx.id)}
-                      className="text-slate-500 hover:text-rose-400 transition-colors text-xs cursor-pointer opacity-0 group-hover:opacity-100 p-1"
+                      className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors text-xs cursor-pointer opacity-0 group-hover:opacity-100 p-1"
                       title="Delete Entry"
                     >
                       ✕
