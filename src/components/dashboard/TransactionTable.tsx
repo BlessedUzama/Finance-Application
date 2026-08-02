@@ -16,6 +16,8 @@ export const TransactionTable: React.FC = () => {
     setSearchQuery,
     removeTransaction,
     addTransaction,
+    isAddTransactionOpen,
+    setIsAddTransactionOpen,
   } = useFinance();
 
   // Local Sort & Type Filter State
@@ -23,8 +25,7 @@ export const TransactionTable: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
 
-  // Add Transaction Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Add Transaction Form State
   const [newMerchant, setNewMerchant] = useState('');
   const [newAmount, setNewAmount] = useState('');
   const [newCategory, setNewCategory] = useState(budgets[0]?.category || 'Housing & Utilities');
@@ -86,7 +87,7 @@ export const TransactionTable: React.FC = () => {
 
     setNewMerchant('');
     setNewAmount('');
-    setIsModalOpen(false);
+    setIsAddTransactionOpen(false);
   };
 
   return (
@@ -149,17 +150,27 @@ export const TransactionTable: React.FC = () => {
             <option value="Freelance">Freelance</option>
           </select>
 
-          {/* Quick Search */}
-          <input
-            type="text"
-            placeholder="Search merchant or amount..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-40 sm:w-48 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:outline-none"
-          />
+          {/* Table Search Input */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search merchant or amount..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-40 sm:w-48 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1.5 text-xs text-slate-500 hover:text-white"
+              >
+                ✕
+              </button>
+            )}
+          </div>
 
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsAddTransactionOpen(true)}
             className="rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all cursor-pointer"
           >
             + Add Entry
@@ -268,13 +279,13 @@ export const TransactionTable: React.FC = () => {
       </div>
 
       {/* Add Transaction Modal */}
-      {isModalOpen && (
+      {isAddTransactionOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h4 className="text-base font-semibold text-white">Add New Ledger Entry</h4>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsAddTransactionOpen(false)}
                 className="text-slate-400 hover:text-white"
               >
                 ✕
@@ -355,7 +366,7 @@ export const TransactionTable: React.FC = () => {
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => setIsAddTransactionOpen(false)}
                   className="rounded-lg border border-slate-800 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800"
                 >
                   Cancel

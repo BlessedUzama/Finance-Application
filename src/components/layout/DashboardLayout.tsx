@@ -18,7 +18,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   subscriptionsSlot,
   transactionTableSlot,
 }) => {
-  const { searchQuery, setSearchQuery } = useFinance();
+  const { searchQuery, setSearchQuery, setIsAddTransactionOpen } = useFinance();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500/30 selection:text-blue-200">
@@ -37,7 +37,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           </div>
 
-          {/* Quick Date Range / Action Controls */}
+          {/* Quick Date Range & Action Controls */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center rounded-lg bg-slate-900 border border-slate-800 p-1 text-xs font-medium text-slate-400">
               <button className="rounded-md bg-slate-800 px-3 py-1 text-white shadow-sm transition-all">
@@ -46,7 +46,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <button className="px-3 py-1 hover:text-slate-200 transition-colors">Quarter</button>
               <button className="px-3 py-1 hover:text-slate-200 transition-colors">Year</button>
             </div>
-            <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500 active:scale-95 transition-all cursor-pointer">
+            <button
+              onClick={() => setIsAddTransactionOpen(true)}
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-blue-600/20 hover:bg-blue-500 active:scale-95 transition-all cursor-pointer"
+            >
               <span>+ Add Transaction</span>
             </button>
           </div>
@@ -68,13 +71,24 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           {/* Search Quick Controls */}
           <div className="flex items-center gap-3">
-            <input
-              type="text"
-              placeholder="Search ledger entries..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full sm:w-64 rounded-lg border border-slate-800 bg-slate-900/90 px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
-            />
+            <div className="relative w-full sm:w-64">
+              <span className="absolute left-3 top-2 text-xs text-slate-500">🔍</span>
+              <input
+                type="text"
+                placeholder="Search ledger entries..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-slate-800 bg-slate-900/90 pl-8 pr-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1.5 text-xs text-slate-500 hover:text-white"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

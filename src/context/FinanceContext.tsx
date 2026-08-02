@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useMemo, type ReactNode } from 'react';
-import type {
+import React, { createContext, useContext, useState, useMemo, ReactNode } from 'react';
+import {
   Transaction,
   Budget,
+  SavingsGoal,
+  SubscriptionItem,
   FinancialMetrics,
   ComputedBudgetProgress,
   FinanceContextType,
@@ -26,14 +28,30 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
   { id: 't-8', date: '2026-07-21', merchant: 'Cinema & Concert Tickets', category: 'Entertainment & Leisure', amount: 120.00, type: 'expense', status: 'pending' },
 ];
 
+const INITIAL_SAVINGS_GOALS: SavingsGoal[] = [
+  { id: 'g-1', name: 'Emergency Reserve Fund', targetAmount: 10000, currentAmount: 6500, targetDate: '2026-12-31', icon: '🛡️', color: '#10B981' },
+  { id: 'g-2', name: 'European Summer Vacation', targetAmount: 3500, currentAmount: 2450, targetDate: '2027-06-15', icon: '✈️', color: '#3B82F6' },
+  { id: 'g-3', name: 'Investment Portfolio Target', targetAmount: 15000, currentAmount: 8200, targetDate: '2027-10-01', icon: '📈', color: '#8B5CF6' },
+];
+
+const INITIAL_SUBSCRIPTIONS: SubscriptionItem[] = [
+  { id: 's-1', name: 'Netflix Premium 4K', cost: 22.99, billingCycle: 'Monthly', dueDate: '2026-08-10', category: 'Entertainment', icon: '🎬', status: 'due-soon' },
+  { id: 's-2', name: 'AWS Cloud Infrastructure', cost: 145.50, billingCycle: 'Monthly', dueDate: '2026-08-15', category: 'Hosting & Tech', icon: '☁️', status: 'pending' },
+  { id: 's-3', name: 'Spotify Family Plan', cost: 16.99, billingCycle: 'Monthly', dueDate: '2026-08-01', category: 'Entertainment', icon: '🎵', status: 'paid' },
+  { id: 's-4', name: 'Equinox Gym Membership', cost: 180.00, billingCycle: 'Monthly', dueDate: '2026-08-05', category: 'Health', icon: '🏋️', status: 'due-soon' },
+];
+
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
 export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Primary Ground-Truth State
+  // Primary State
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
   const [budgets, setBudgets] = useState<Budget[]>(INITIAL_BUDGETS);
+  const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>(INITIAL_SAVINGS_GOALS);
+  const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>(INITIAL_SUBSCRIPTIONS);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isAddTransactionOpen, setIsAddTransactionOpen] = useState<boolean>(false);
 
   // 1. Derive Overall Financial Overview Metrics
   const metrics = useMemo<FinancialMetrics>(() => {
@@ -113,19 +131,52 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     );
   };
 
+  const addSavingsGoal = (goalData: Omit<SavingsGoal, 'id'>) => {
+    const newGoal: SavingsGoal = {
+      ...goalData,
+      id: `g-${Date.now()}`,
+    };
+    setSavingsGoals((prev) => [...prev, newGoal]);
+  };
+
+  const depositSavingsGoal = (id: string, amount: number) => {
+    setSavingsGoals((prev) =>
+      prev.map((g) =>
+        g.id === id
+          ? { ...g, currentAmount: Math.min(g.targetAmount, g.currentAmount + amount) }
+          : g
+      )
+    );
+  };
+
+  const addSubscription = (subData: Omit<SubscriptionItem, 'id'>) => {
+    const newSub: SubscriptionItem = {
+      ...subData,
+      id: `s-${Date.now()}`,
+    };
+    setSubscriptions((prev) => [...prev, newSub]);
+  };
+
   const value: FinanceContextType = {
     transactions,
     budgets,
+    savingsGoals,
+    subscriptions,
     selectedCategory,
     searchQuery,
+    isAddTransactionOpen,
     metrics,
     budgetProgress,
     filteredTransactions,
     addTransaction,
     removeTransaction,
     updateBudget,
+    addSavingsGoal,
+    depositSavingsGoal,
+    addSubscription,
     setSelectedCategory,
     setSearchQuery,
+    setIsAddTransactionOpen,
   };
 
   return <FinanceContext.Provider value={value}>{children}</FinanceContext.Provider>;
